@@ -12,7 +12,20 @@
           "package_name": "com.renu.chatapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "315606460486-p381lnkv4huqvh9b87l5kcp3ien6ceu6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.renu.chatapp",
+            "certificate_hash": "f7d50274f752f2ea11b6465e6d0ce216bfb8acb7"
+          }
+        },
+        {
+          "client_id": "315606460486-3ne3na36lfj80dmo9bcb2pqsdt4jca20.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDeYVZelwjXhR0LhhqqVAxu0aR_Bi7hHVg"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "315606460486-3ne3na36lfj80dmo9bcb2pqsdt4jca20.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
