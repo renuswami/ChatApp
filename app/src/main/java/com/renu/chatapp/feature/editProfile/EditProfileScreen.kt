@@ -1,5 +1,7 @@
 package com.renu.chatapp.feature.editProfile
 
+import android.provider.ContactsContract.CommonDataKinds.Email
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -21,13 +23,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import javax.inject.Scope
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditProfileScreen() {
+fun EditProfileScreen(
+    email: String
+) {
 
     val snackbarHostState = remember { SnackbarHostState() }
     
@@ -52,7 +57,8 @@ fun EditProfileScreen() {
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(paddingValues)
-                .padding(16.dp)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ){
             OutlinedTextField(
                 modifier = Modifier.fillMaxSize(),
@@ -60,10 +66,17 @@ fun EditProfileScreen() {
                 onValueChange = { name = it},
                 label = { Text(text = "Name") }
             )
+            OutlinedTextField(
+                modifier = Modifier.fillMaxSize(),
+                value = email,
+                onValueChange = {},
+                readOnly = true,
+                label = { Text(text = "Email") }
+            )
 
             val scope = rememberCoroutineScope()
             Button(
-                modifier = Modifier.padding(top = 24.dp)
+                modifier = Modifier.padding(top = 12.dp)
                     .align(Alignment.CenterHorizontally),
                 onClick = {
                 if(name.isNotEmpty()){

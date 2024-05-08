@@ -47,7 +47,7 @@ fun SignInWithGoogleButton(
     ) {
         Text(
             text = "Sing-in With Google",
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.bodyLarge
         )
     }
 }

@@ -15,12 +15,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
 
-@Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -33,7 +32,7 @@ fun LoginScreen() {
         }
     ) { paddingValues ->
 
-        val context  = LocalContext.current
+        val context = LocalContext.current
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -42,14 +41,14 @@ fun LoginScreen() {
 
         ) {
             SignInWithGoogleButton(
-                onSuccess = {user ->
+                onSuccess = { user ->
                     Toast.makeText(context, "signed-in as ${user.email}", Toast.LENGTH_SHORT).show()
+                    navController.navigate("EditProfile?email=${user.email}")
                 },
-                onError = {error ->
+                onError = { error ->
                     Toast.makeText(context, "Error : ${error?.message}", Toast.LENGTH_SHORT).show()
                 }
             )
-
         }
     }
 }
