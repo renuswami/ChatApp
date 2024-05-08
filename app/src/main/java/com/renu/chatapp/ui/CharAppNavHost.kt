@@ -17,18 +17,18 @@ fun CharAppNavHost() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Login.name
+        startDestination = Screen.Login.route
     ) {
-        composable(Screen.Spalsh.name) {
+        composable(Screen.Spalsh.route) {
             SplashScreen()
         }
 
-        composable(Screen.Login.name) {
+        composable(Screen.Login.route) {
             LoginScreen(navController)
         }
 
         composable(
-            "EditProfile?email={email}",
+            Screen.EditProfile.format(),
             arguments = listOf(
                 navArgument("email") {
                     type = NavType.StringType

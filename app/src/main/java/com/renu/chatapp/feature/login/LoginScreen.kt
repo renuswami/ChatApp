@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
+import com.renu.chatapp.ui.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,8 +43,9 @@ fun LoginScreen(navController: NavHostController) {
         ) {
             SignInWithGoogleButton(
                 onSuccess = { user ->
-                    Toast.makeText(context, "signed-in as ${user.email}", Toast.LENGTH_SHORT).show()
-                    navController.navigate("EditProfile?email=${user.email}")
+                    val email = user.email ?: error("Email not found")
+                    Toast.makeText(context, "signed-in as ${email}", Toast.LENGTH_SHORT).show()
+                    navController.navigate(Screen.EditProfile(email).route)
                 },
                 onError = { error ->
                     Toast.makeText(context, "Error : ${error?.message}", Toast.LENGTH_SHORT).show()
