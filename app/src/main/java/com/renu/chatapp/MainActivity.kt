@@ -6,8 +6,16 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.renu.chatapp.feature.editProfile.EditProfileScreen
 import com.renu.chatapp.feature.login.LoginScreen
+import com.renu.chatapp.feature.splash.SplashScreen
+import com.renu.chatapp.ui.CharAppNavHost
+import com.renu.chatapp.ui.Screen
 import com.renu.chatapp.ui.theme.ChatAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,8 +27,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                   // SplashScreen()
-                    LoginScreen()
+                    CharAppNavHost()
                 }
             }
         }

@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
     implementation(libs.firebase.firestore)
+    implementation(libs.androidx.navigation.compose)
 
     //firebase
     implementation(platform(libs.firebase.bom))
