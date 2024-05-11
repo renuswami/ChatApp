@@ -17,6 +17,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,83 +26,69 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.renu.chatapp.model.Gender
+import com.renu.chatapp.domain.model.Gender
+import com.renu.chatapp.domain.model.User
 import com.streamliners.compose.comp.select.RadioGroup
+import com.streamliners.compose.comp.textInput.TextInputLayout
+import com.streamliners.compose.comp.textInput.config.InputConfig
+import com.streamliners.compose.comp.textInput.config.text
+import com.streamliners.compose.comp.textInput.state.TextInputState
+import com.streamliners.compose.comp.textInput.state.allHaveValidInputs
+import com.streamliners.compose.comp.textInput.state.value
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(
-    email: String
+    viewModel: EditProfileViewModel, email: String
 ) {
 
     val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "Profile") }
-            )
-        },
-        snackbarHost = {
-            //TODO : SnackBar not visible when keyboard is open
-            SnackbarHost(
-                hostState = snackbarHostState
-            )
+    Scaffold(topBar = {
+        TopAppBar(title = { Text(text = "Profile") })
+    }, snackbarHost = {
+        //TODO : SnackBar not visible when keyboard is open
+        SnackbarHost(
+            hostState = snackbarHostState
+        )
+    }) { paddingValues ->
+
+        val nameInput = remember {
+            mutableStateOf(TextInputState(label = "Name", inputConfig = InputConfig.text {
+                minLength = 3
+                maxLength = 25
+            }))
         }
-    ) { paddingValues ->
-
-        var name by remember { mutableStateOf("") }
-        var bio by remember { mutableStateOf("") }
-        var nameError by remember { mutableStateOf(false) }
-        var bioError by remember { mutableStateOf(false) }
+        val bioInput = remember {
+            mutableStateOf(TextInputState(label = "Bio", inputConfig = InputConfig.text {
+                minLength = 3
+                maxLength = 25
+            }))
+        }
         val gender = remember { mutableStateOf<Gender?>(null) }
+        var genderError by remember { mutableStateOf(false) }
+
+        LaunchedEffect(key1 = gender.value) {
+            if (gender.value != null) genderError = false
+        }
 
         Column(
             Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(paddingValues)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+                .padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            OutlinedTextField(
-                modifier = Modifier.fillMaxSize(),
-                value = name,
-                onValueChange = {
-                    name = it
-                    nameError = it.isBlank()
-                },
-                label = { Text(text = "Name") },
-                isError = nameError,
-                supportingText = if (nameError) {
-                    { Text(text = "Requried!") }
-                } else {
-                    null
-                }
-            )
-            OutlinedTextField(
-                modifier = Modifier.fillMaxSize(),
+
+            TextInputLayout(state = nameInput)
+            OutlinedTextField(modifier = Modifier.fillMaxSize(),
                 value = email,
                 onValueChange = {},
                 readOnly = true,
-                label = { Text(text = "Email") }
-            )
-            OutlinedTextField(
-                modifier = Modifier.fillMaxSize(),
-                value = bio,
-                onValueChange = {
-                    bio = it
-                    bioError = it.isBlank()
-                },
-                label = { Text(text = "Bio") },
-                isError = bioError,
-                supportingText = if (bioError) {
-                    { Text(text = "Requried!") }
-                } else {
-                    null
-                }
-            )
+                label = { Text(text = "Email") })
+
             Card {
                 Column(
                     modifier = Modifier
@@ -114,49 +101,52 @@ fun EditProfileScreen(
                         title = "Gender",
                         state = gender,
                         options = Gender.entries.toList(),
-                        labelExtractor = { it.name }
+                        labelExtractor = { it.name },
                     )
+                    if (genderError) {
+                        Text(text = "Requried!")
+                    }
                 }
             }
 
 
-            val scope = rememberCoroutineScope()
-            Button(
-                modifier = Modifier
-                    .padding(top = 12.dp)
-                    .align(Alignment.CenterHorizontally),
+            TextInputLayout(state = bioInput)
+
+
+            Button(modifier = Modifier
+                .padding(top = 12.dp)
+                .align(Alignment.CenterHorizontally),
                 onClick = {
-                    if (name.isBlank() && bio.isBlank()) {
-                        scope.launch {
-                            snackbarHostState.showSnackbar("Your name is $name and bio is $bio")
-                        }
-                    } else {
-                        scope.launch {
-                            snackbarHostState.showSnackbar("Please input your name")
-                        }
-                    }
-                    if (name.isBlank()) {
-                        scope.launch {
-                            snackbarHostState.showSnackbar("Your name is $name")
-                        }
-                    } else {
-                        scope.launch {
-                            snackbarHostState.showSnackbar("Please input your name")
-                        }
-                    }
-                    if (bio.isBlank()) {
-                        scope.launch {
-                            snackbarHostState.showSnackbar("Bio is $bio")
-                        }
-                    } else {
-                        scope.launch {
-                            snackbarHostState.showSnackbar("Please input your bio")
+                    if (TextInputState.allHaveValidInputs(
+                            nameInput, bioInput
+                        ) && gender.value != null
+                    ) {
+                        gender.value?.let {
+                            val user = User(
+                                name = nameInput.value(),
+                                email = email,
+                                bio = nameInput.value(),
+                                gender = it
+                            )
+                            viewModel.saveUser(user) {
+                                scope.launch {
+                                    snackbarHostState.showSnackbar("Registration Seccussful.")
+                                }
+                            }
                         }
                     }
-                }) {
+                    if (gender.value == null) {
+                        genderError = true
+                    }
+                }
+
+            ) {
                 Text(text = "SAVE")
             }
         }
     }
 }
+
+
+
 
