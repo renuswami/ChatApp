@@ -26,8 +26,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.renu.chatapp.domain.model.Gender
 import com.renu.chatapp.domain.model.User
+import com.renu.chatapp.ui.Screen
 import com.streamliners.compose.comp.select.RadioGroup
 import com.streamliners.compose.comp.textInput.TextInputLayout
 import com.streamliners.compose.comp.textInput.config.InputConfig
@@ -40,7 +42,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(
-    viewModel: EditProfileViewModel, email: String
+    viewModel: EditProfileViewModel, email: String, navController: NavHostController
 ) {
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -86,7 +88,7 @@ fun EditProfileScreen(
             OutlinedTextField(modifier = Modifier.fillMaxSize(),
                 value = email,
                 onValueChange = {},
-                readOnly = true,
+                enabled = false,
                 label = { Text(text = "Email") })
 
             Card {
@@ -132,6 +134,7 @@ fun EditProfileScreen(
                                 scope.launch {
                                     snackbarHostState.showSnackbar("Registration Seccussful.")
                                 }
+                                navController.navigate(Screen.Home.route)
                             }
                         }
                     }

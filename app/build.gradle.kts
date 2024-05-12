@@ -69,6 +69,9 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.firebase.firestore)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.datastore.core)
+    implementation(libs.gson)
+    implementation(libs.koin.android)
 
     //firebase
     implementation(platform(libs.firebase.bom))
