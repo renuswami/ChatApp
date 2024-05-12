@@ -9,4 +9,6 @@ data class User(
     val email: String,
     val bio: String,
     val gender: Gender
-)
+){
+    constructor(): this(null, "", "", "", Gender.Male)
+}

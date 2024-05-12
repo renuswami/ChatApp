@@ -20,7 +20,10 @@ import com.renu.chatapp.ui.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun LoginScreen(
+    navController: NavHostController,
+    viewModel: LoginViewModel
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -44,8 +47,7 @@ fun LoginScreen(navController: NavHostController) {
             SignInWithGoogleButton(
                 onSuccess = { user ->
                     val email = user.email ?: error("Email not found")
-                    Toast.makeText(context, "signed-in as ${email}", Toast.LENGTH_SHORT).show()
-                    navController.navigate(Screen.EditProfile(email).route)
+                   viewModel.onLoggedIn(email, navController)
                 },
                 onError = { error ->
                     Toast.makeText(context, "Error : ${error?.message}", Toast.LENGTH_SHORT).show()

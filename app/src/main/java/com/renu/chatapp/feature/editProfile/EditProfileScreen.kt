@@ -127,7 +127,7 @@ fun EditProfileScreen(
                             val user = User(
                                 name = nameInput.value(),
                                 email = email,
-                                bio = nameInput.value(),
+                                bio = bioInput.value(),
                                 gender = it
                             )
                             viewModel.saveUser(user) {

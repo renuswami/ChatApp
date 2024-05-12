@@ -26,7 +26,7 @@ fun CharAppNavHost() {
         }
 
         composable(Screen.Login.route) {
-            LoginScreen(navController)
+            LoginScreen(navController, koinViewModel())
         }
 
         composable(
