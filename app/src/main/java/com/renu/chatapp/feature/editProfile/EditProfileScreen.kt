@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.renu.chatapp.domain.model.Gender
 import com.renu.chatapp.domain.model.User
+import com.renu.chatapp.feature.editProfile.comp.AddImageButton
+import com.renu.chatapp.feature.editProfile.comp.ProfileImage
 import com.renu.chatapp.ui.Screen
 import com.streamliners.compose.comp.select.RadioGroup
 import com.streamliners.compose.comp.textInput.TextInputLayout
@@ -37,6 +39,12 @@ import com.streamliners.compose.comp.textInput.config.text
 import com.streamliners.compose.comp.textInput.state.TextInputState
 import com.streamliners.compose.comp.textInput.state.allHaveValidInputs
 import com.streamliners.compose.comp.textInput.state.value
+import com.streamliners.pickers.media.FromGalleryType
+import com.streamliners.pickers.media.MediaPickerDialog
+import com.streamliners.pickers.media.MediaPickerDialogState
+import com.streamliners.pickers.media.MediaType
+import com.streamliners.pickers.media.PickedMedia
+import com.streamliners.pickers.media.rememberMediaPickerDialogState
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,6 +53,7 @@ fun EditProfileScreen(
     viewModel: EditProfileViewModel, email: String, navController: NavHostController
 ) {
 
+    val mediaPickerDialogState = rememberMediaPickerDialogState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
@@ -56,6 +65,10 @@ fun EditProfileScreen(
             hostState = snackbarHostState
         )
     }) { paddingValues ->
+
+        val image = remember {
+            mutableStateOf<PickedMedia?>(null)
+        }
 
         val nameInput = remember {
             mutableStateOf(TextInputState(label = "Name", inputConfig = InputConfig.text {
@@ -83,6 +96,34 @@ fun EditProfileScreen(
                 .padding(paddingValues)
                 .padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
+
+            val initImagePicker = {
+                mediaPickerDialogState.value = MediaPickerDialogState.Visible(
+                    type = MediaType.Image,
+                    allowMultiple = false,
+                    fromGalleryType = FromGalleryType.VisualMediaPicker
+                ) { getList ->
+                    scope.launch {
+                        val list = getList()
+                        list.firstOrNull()?.let {
+                            image.value = it
+                        }
+                    }
+                }
+            }
+
+            image.value?.let {
+                ProfileImage(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    pickedMedia = it,
+                    onClick = initImagePicker
+                )
+            } ?: run {
+                AddImageButton(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    onClick = initImagePicker
+                )
+            }
 
             TextInputLayout(state = nameInput)
             OutlinedTextField(modifier = Modifier.fillMaxSize(),
@@ -148,6 +189,10 @@ fun EditProfileScreen(
             }
         }
     }
+    MediaPickerDialog(
+        state = mediaPickerDialogState,
+        authority = "com.renu.chatapp.fileprovider"
+    )
 }
 
 
