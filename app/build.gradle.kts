@@ -68,7 +68,6 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
     implementation(libs.material.icons.extended)
-    implementation(libs.firebase.firestore)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.datastore.core)
     implementation(libs.gson)
@@ -81,6 +80,8 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation("com.google.firebase:firebase-analytics")
     implementation(libs.firebase.ui.auth)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.storage)
 
     // DroidLibs
     implementation(libs.droidlibs.compose.android)

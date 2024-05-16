@@ -168,10 +168,11 @@ fun EditProfileScreen(
                             val user = User(
                                 name = nameInput.value(),
                                 email = email,
+                                profileImageUrl = null,
                                 bio = bioInput.value(),
                                 gender = it
                             )
-                            viewModel.saveUser(user) {
+                            viewModel.saveUser(user, image.value) {
                                 scope.launch {
                                     snackbarHostState.showSnackbar("Registration Seccussful.")
                                 }
