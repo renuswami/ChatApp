@@ -40,6 +40,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -86,6 +87,8 @@ dependencies {
     // DroidLibs
     implementation(libs.droidlibs.compose.android)
     implementation(libs.droidlibs.pickers)
+    implementation(libs.droidlibs.base)
+    implementation(libs.droidlibs.utils)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

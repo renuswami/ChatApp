@@ -17,8 +17,12 @@ import com.renu.chatapp.feature.splash.SplashScreen
 import com.renu.chatapp.ui.CharAppNavHost
 import com.renu.chatapp.ui.Screen
 import com.renu.chatapp.ui.theme.ChatAppTheme
+import com.streamliners.base.BaseActivity
 
-class MainActivity : ComponentActivity() {
+class MainActivity : BaseActivity() {
+
+    override var buildType: String = BuildConfig.BUILD_TYPE
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

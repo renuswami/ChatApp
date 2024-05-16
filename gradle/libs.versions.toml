@@ -25,6 +25,8 @@ firebase-ui-auth = { module = "com.firebaseui:firebase-ui-auth", version.ref = "
 firebase-storage = { module = "com.google.firebase:firebase-storage" }
 droidlibs-compose-android = { module = "com.github.The-Streamliners.DroidLibs:compose-android", version.ref = "droidlibs" }
 droidlibs-pickers = { module = "com.github.The-Streamliners.DroidLibs:pickers", version.ref = "droidlibs" }
+droidlibs-base = { module = "com.github.The-Streamliners.DroidLibs:base", version.ref = "droidlibs" }
+droidlibs-utils = { module = "com.github.The-Streamliners.DroidLibs:utils", version.ref = "droidlibs" }
 androidx-datastore-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastore-core" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
