@@ -8,6 +8,7 @@ import com.renu.chatapp.data.UserRepo
 import com.renu.chatapp.data.remote.StorageRepo
 import com.renu.chatapp.domain.model.User
 import com.streamliners.pickers.media.PickedMedia
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,9 +21,14 @@ class EditProfileViewModel @Inject constructor(
     fun saveUser(
         user: User,
         image: PickedMedia?,
-        onSuccess: () -> Unit
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
     ){
-        viewModelScope.launch {
+        val exceptionHandler = CoroutineExceptionHandler { _, error ->
+            onError(error.message ?: "Unknown error")
+        }
+
+        viewModelScope.launch(exceptionHandler) {
 
             val updatedUser = user.copy(
             profileImageUrl = uplaodProfileImage(user.email, image)
