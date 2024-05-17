@@ -13,7 +13,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -41,6 +40,8 @@ import com.renu.chatapp.feature.editProfile.comp.AddImageButton
 import com.renu.chatapp.feature.editProfile.comp.ProfileImage
 import com.renu.chatapp.helper.visible
 import com.renu.chatapp.ui.Screen
+import com.streamliners.base.taskState.comp.TaskLoadingButton
+import com.streamliners.base.taskState.comp.whenError
 import com.streamliners.compose.comp.select.RadioGroup
 import com.streamliners.compose.comp.textInput.TextInputLayout
 import com.streamliners.compose.comp.textInput.config.InputConfig
@@ -56,8 +57,7 @@ import com.streamliners.pickers.media.MediaPickerDialogState
 import com.streamliners.pickers.media.MediaType
 import com.streamliners.pickers.media.PickedMedia
 import com.streamliners.pickers.media.rememberMediaPickerDialogState
-import com.streamliners.utils.DateTimeUtils
-import com.streamliners.utils.DateTimeUtils.Format.*
+import com.streamliners.utils.DateTimeUtils.Format.DATE_MONTH_YEAR_2
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -109,8 +109,6 @@ fun EditProfileScreen(
         var genderError by remember { mutableStateOf(false) }
 
         var dob by remember { mutableStateOf<String?>("") }
-
-        var isLoading by remember { mutableStateOf(false) }
 
         LaunchedEffect(key1 = gender.value) {
             if (gender.value != null) genderError = false
@@ -200,9 +198,12 @@ fun EditProfileScreen(
 
             TextInputLayout(state = bioInput)
 
-            Button(modifier = Modifier
-                .padding(top = 12.dp)
-                .align(Alignment.CenterHorizontally),
+            TaskLoadingButton(
+                modifier = Modifier
+                    .padding(top = 12.dp)
+                    .align(Alignment.CenterHorizontally),
+                state = viewModel.saveProfileTask,
+                label = "Save",
                 onClick = {
                     if (TextInputState.allHaveValidInputs(
                             nameInput, bioInput
@@ -217,22 +218,15 @@ fun EditProfileScreen(
                                 gender = it,
                                 dob = dob
                             )
-                            isLoading = true
                             viewModel.saveUser(
                                 user = user,
                                 image = image.value,
                                 onSuccess = {
-                                    isLoading = false
                                     scope.launch {
                                         snackbarHostState.showSnackbar("Registration Seccussful.")
                                     }
                                     navController.navigate(Screen.Home.route)
                                 },
-                                onError = {
-                                    scope.launch {
-                                        snackbarHostState.showSnackbar(it)
-                                    }
-                                }
                             )
                         }
                     }
@@ -240,23 +234,9 @@ fun EditProfileScreen(
                         genderError = true
                     }
                 }
-
-            ) {
-                Box (
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        modifier = Modifier.visible(!isLoading),
-                        text = "SAVE",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                    if (isLoading){
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp),
-                            strokeWidth = 2.dp
-                        )
-                    }
-                }
+            )
+            viewModel.saveProfileTask.whenError {
+                Text(text = "Error: $it")
             }
         }
     }

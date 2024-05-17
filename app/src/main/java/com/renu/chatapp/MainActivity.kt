@@ -18,6 +18,7 @@ import com.renu.chatapp.ui.CharAppNavHost
 import com.renu.chatapp.ui.Screen
 import com.renu.chatapp.ui.theme.ChatAppTheme
 import com.streamliners.base.BaseActivity
+import com.streamliners.base.uiEvent.UiEventDialogs
 
 class MainActivity : BaseActivity() {
 
@@ -32,6 +33,7 @@ class MainActivity : BaseActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     CharAppNavHost()
+                    UiEventDialogs()
                 }
             }
         }
