@@ -7,6 +7,7 @@ import com.renu.chatapp.data.remote.StorageRepo
 import com.renu.chatapp.domain.model.User
 import com.streamliners.base.BaseViewModel
 import com.streamliners.base.ext.execute
+import com.streamliners.base.ext.executeOnMain
 import com.streamliners.base.taskState.load
 import com.streamliners.base.taskState.taskStateOf
 import com.streamliners.pickers.media.PickedMedia
@@ -34,7 +35,7 @@ class EditProfileViewModel @Inject constructor(
                     user = updatedUser
                 )
                 localRepo.onLoggedIn()
-                onSuccess()
+                executeOnMain { onSuccess() }
             }
         }
     }
