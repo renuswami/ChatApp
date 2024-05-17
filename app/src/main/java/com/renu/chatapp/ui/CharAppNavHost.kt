@@ -1,6 +1,7 @@
 package com.renu.chatapp.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,6 +20,7 @@ import org.koin.androidx.compose.koinViewModel
 fun MainActivity.CharAppNavHost() {
 
     val navController = rememberNavController()
+
 
     NavHost(
         navController = navController,
