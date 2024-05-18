@@ -2,17 +2,15 @@ package com.renu.chatapp.feature.editProfile
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -38,10 +36,7 @@ import com.renu.chatapp.domain.model.Gender
 import com.renu.chatapp.domain.model.User
 import com.renu.chatapp.feature.editProfile.comp.AddImageButton
 import com.renu.chatapp.feature.editProfile.comp.ProfileImage
-import com.renu.chatapp.helper.visible
 import com.renu.chatapp.ui.Screen
-import com.streamliners.base.taskState.comp.TaskLoadingButton
-import com.streamliners.base.taskState.comp.whenError
 import com.streamliners.compose.comp.select.RadioGroup
 import com.streamliners.compose.comp.textInput.TextInputLayout
 import com.streamliners.compose.comp.textInput.config.InputConfig
@@ -57,7 +52,8 @@ import com.streamliners.pickers.media.MediaPickerDialogState
 import com.streamliners.pickers.media.MediaType
 import com.streamliners.pickers.media.PickedMedia
 import com.streamliners.pickers.media.rememberMediaPickerDialogState
-import com.streamliners.utils.DateTimeUtils.Format.DATE_MONTH_YEAR_2
+import com.streamliners.utils.DateTimeUtils
+import com.streamliners.utils.DateTimeUtils.Format.*
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,7 +62,7 @@ fun EditProfileScreen(
     viewModel: EditProfileViewModel,
     email: String,
     navController: NavHostController,
-    showDatePicker: ShowDatePicker
+    showDatePicker : ShowDatePicker
 ) {
 
     val mediaPickerDialogState = rememberMediaPickerDialogState()
@@ -74,8 +70,7 @@ fun EditProfileScreen(
     val scope = rememberCoroutineScope()
 
     Scaffold(topBar = {
-        TopAppBar(
-            title = { Text(text = "Profile") },
+        TopAppBar(title = { Text(text = "Profile") },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primary,
                 titleContentColor = Color.White
@@ -105,10 +100,8 @@ fun EditProfileScreen(
             }))
         }
         val gender = remember { mutableStateOf<Gender?>(null) }
-
         var genderError by remember { mutableStateOf(false) }
-
-        var dob by remember { mutableStateOf<String?>("") }
+        var dob by remember {  mutableStateOf<String?>("")  }
 
         LaunchedEffect(key1 = gender.value) {
             if (gender.value != null) genderError = false
@@ -184,8 +177,8 @@ fun EditProfileScreen(
                         showDatePicker(
                             DatePickerDialog.Params(
                                 format = DATE_MONTH_YEAR_2,
-                                prefill = dob?.ifBlank { null },
-                                onPicked = { date ->
+                                prefill = dob,
+                                onPicked = {date ->
                                     dob = date
                                 }
                             )
@@ -198,12 +191,9 @@ fun EditProfileScreen(
 
             TextInputLayout(state = bioInput)
 
-            TaskLoadingButton(
-                modifier = Modifier
-                    .padding(top = 12.dp)
-                    .align(Alignment.CenterHorizontally),
-                state = viewModel.saveProfileTask,
-                label = "Save",
+            Button(modifier = Modifier
+                .padding(top = 12.dp)
+                .align(Alignment.CenterHorizontally),
                 onClick = {
                     if (TextInputState.allHaveValidInputs(
                             nameInput, bioInput
@@ -215,28 +205,23 @@ fun EditProfileScreen(
                                 email = email,
                                 profileImageUrl = null,
                                 bio = bioInput.value(),
-                                gender = it,
-                                dob = dob
+                                gender = it
                             )
-                            viewModel.saveUser(
-                                user = user,
-                                image = image.value,
-                                onSuccess = {
-                                    scope.launch {
-                                        snackbarHostState.showSnackbar("Registration Seccussful.")
-                                    }
-                                    navController.navigate(Screen.Home.route)
-                                },
-                            )
+                            viewModel.saveUser(user, image.value) {
+                                scope.launch {
+                                    snackbarHostState.showSnackbar("Registration Seccussful.")
+                                }
+                                navController.navigate(Screen.Home.route)
+                            }
                         }
                     }
                     if (gender.value == null) {
                         genderError = true
                     }
                 }
-            )
-            viewModel.saveProfileTask.whenError {
-                Text(text = "Error: $it")
+
+            ) {
+                Text(text = "SAVE")
             }
         }
     }
