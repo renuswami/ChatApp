@@ -5,6 +5,7 @@ import com.renu.chatapp.data.UserRepo
 import com.renu.chatapp.data.remote.StorageRepo
 import com.renu.chatapp.feature.editProfile.EditProfileViewModel
 import com.renu.chatapp.feature.login.LoginViewModel
+import com.renu.chatapp.feature.newChat.NewChatViewModel
 import com.renu.chatapp.feature.splash.SplashViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -19,4 +20,5 @@ val viewModelModule = module {
     viewModel { EditProfileViewModel(get(), get(), get()) }
     viewModel { SplashViewModel(get()) }
     viewModel { LoginViewModel(get(), get())}
+    viewModel {NewChatViewModel (get(), get())}
 }

@@ -16,7 +16,7 @@ class SplashViewModel @Inject constructor(
         navController: NavController
     ) {
         viewModelScope.launch {
-            if (localRepo.isLoggedIn() == true) {
+            if (localRepo.isLoggedIn()) {
                 navController.navigate(Screen.Home.route)
             } else {
                 navController.navigate(Screen.Login.route)

@@ -14,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import com.renu.chatapp.feature.editProfile.EditProfileScreen
 import com.renu.chatapp.feature.login.LoginScreen
 import com.renu.chatapp.feature.splash.SplashScreen
+import com.renu.chatapp.temp.Scripts
 import com.renu.chatapp.ui.CharAppNavHost
 import com.renu.chatapp.ui.Screen
 import com.renu.chatapp.ui.theme.ChatAppTheme
@@ -36,6 +37,13 @@ class MainActivity : BaseActivity() {
                     UiEventDialogs()
                 }
             }
+        }
+          // runScripts()
+    }
+
+    private fun runScripts() {
+        execute {
+            Scripts.saveDummyUsers()
         }
     }
 }

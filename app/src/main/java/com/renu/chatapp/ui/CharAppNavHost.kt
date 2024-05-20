@@ -1,7 +1,6 @@
 package com.renu.chatapp.ui
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -11,10 +10,12 @@ import com.renu.chatapp.MainActivity
 import com.renu.chatapp.feature.editProfile.EditProfileScreen
 import com.renu.chatapp.feature.home.HomeScreen
 import com.renu.chatapp.feature.login.LoginScreen
+import com.renu.chatapp.feature.newChat.NewChatScreen
 import com.renu.chatapp.feature.splash.SplashScreen
 import com.streamliners.base.ext.koinBaseViewModel
 import com.streamliners.pickers.date.showDatePickerDialog
 import org.koin.androidx.compose.koinViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @Composable
 fun MainActivity.CharAppNavHost() {
@@ -51,7 +52,14 @@ fun MainActivity.CharAppNavHost() {
             )
         }
         composable(Screen.Home.route) {
-            HomeScreen()
+            HomeScreen(navController)
+        }
+
+        composable(Screen.NewChat.route) {
+            NewChatScreen(
+                viewModel = koinBaseViewModel(),
+                navController = navController
+            )
         }
 
     }

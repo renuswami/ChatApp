@@ -7,8 +7,9 @@ sealed class Screen(
 ) {
     data object Spalsh : Screen("Spalsh")
     data object Login : Screen("Login")
-
     data object Home : Screen("Home")
+    data object NewChat : Screen("NewChat")
+
     class EditProfile(
         email: String
     ) : Screen("EditProfile?email=$email"){

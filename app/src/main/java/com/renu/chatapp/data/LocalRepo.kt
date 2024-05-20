@@ -1,15 +1,22 @@
 package com.renu.chatapp.data
 
+import com.renu.chatapp.domain.model.User
 import com.renu.chatapp.helper.DataStoreUtil
 
 class LocalRepo (
     val dataStoreUtil: DataStoreUtil
     ){
-    suspend fun onLoggedIn(){
-        dataStoreUtil.setData("isLoggedIn", true)
+    suspend fun onLoggedIn(user: User){
+        dataStoreUtil.setData("user", user)
     }
 
-    suspend fun isLoggedIn(): Boolean? {
-        return dataStoreUtil.getData<Boolean>("isLoggedIn")
+    suspend fun getLoggedInUser(): User {
+        return getLoggedInUserNullble() ?: error("User not found in ;local")
     }
+
+    private suspend fun getLoggedInUserNullble(): User? {
+        return dataStoreUtil.getData<User>("user")
+    }
+
+    suspend fun isLoggedIn() = getLoggedInUserNullble() != null
 }

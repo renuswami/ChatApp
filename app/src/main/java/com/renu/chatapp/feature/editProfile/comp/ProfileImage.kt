@@ -9,8 +9,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.renu.chatapp.ui.general.AsyncImage
 import com.streamliners.pickers.media.PickedMedia
 
 @Composable
@@ -20,12 +20,7 @@ fun ProfileImage(
     onClick: () -> Unit
 ){
     AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(pickedMedia.uri)
-            .crossfade(true)
-            .build(),
-        contentDescription = "",
-        contentScale = ContentScale.FillBounds,
+       uri = pickedMedia.uri,
         modifier = modifier
             .size(100.dp)
             .clip(CircleShape)
