@@ -7,21 +7,45 @@ import com.renu.chatapp.domain.model.Channel
 import kotlinx.coroutines.tasks.await
 
 
-class ChannelRepo{
+class ChannelRepo {
 
     suspend fun getOneToOneChannel(
-         currentUserId: String,
-         otherUserId: String
+        currentUserId: String,
+        otherUserId: String
     ): Channel? {
         return Firebase.firestore
             .channelsColl()
             .whereEqualTo(Channel::type.name, Channel.Type.OneToOne)
-            .whereArrayContainsAny(Channel::members.name, listOf( currentUserId, otherUserId))
+            .whereArrayContainsAny(Channel::members.name, listOf(currentUserId, otherUserId))
             .get()
             .await()
             .toObjects(Channel::class.java)
-            .firstOrNull{
+            .firstOrNull {
                 it.members == listOf(currentUserId, otherUserId)
             }
+    }
+
+    suspend fun createOneToOneChannel(
+        currentUserId: String,
+        otherUserId: String
+    ): String{
+        val collRef = Firebase.firestore.channelsColl()
+        val id = collRef.document().id
+        Firebase.firestore
+            collRef.document(id)
+            .set(
+                Channel(
+                    imageUrl = null,
+                    type = Channel.Type.OneToOne,
+                    name = "OneToOne",
+                    description = null,
+                    members = listOf(
+                        currentUserId, otherUserId
+                    ),
+                    messages = emptyList()
+                )
+            )
+            .await()
+        return id
     }
 }

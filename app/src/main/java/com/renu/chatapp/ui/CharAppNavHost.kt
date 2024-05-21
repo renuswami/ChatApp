@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.renu.chatapp.MainActivity
+import com.renu.chatapp.feature.chat.ChatScreen
 import com.renu.chatapp.feature.editProfile.EditProfileScreen
 import com.renu.chatapp.feature.home.HomeScreen
 import com.renu.chatapp.feature.login.LoginScreen
@@ -61,5 +62,19 @@ fun MainActivity.CharAppNavHost() {
             )
         }
 
+        composable(
+            Screen.Chat.format(),
+            arguments = listOf(
+                navArgument("channelId") {
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            val channelId = it.arguments?.getString("channelId")?: error("channelId argument not passed")
+            ChatScreen(
+                channelId = channelId,
+                navController = navController
+            )
+        }
     }
 }

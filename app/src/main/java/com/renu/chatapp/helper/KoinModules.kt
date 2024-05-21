@@ -2,6 +2,7 @@ package com.renu.chatapp.helper
 
 import com.renu.chatapp.data.LocalRepo
 import com.renu.chatapp.data.UserRepo
+import com.renu.chatapp.data.remote.ChannelRepo
 import com.renu.chatapp.data.remote.StorageRepo
 import com.renu.chatapp.feature.editProfile.EditProfileViewModel
 import com.renu.chatapp.feature.login.LoginViewModel
@@ -14,11 +15,12 @@ val appModule = module {
     single { UserRepo()}
     single {LocalRepo(DataStoreUtil.create(get()))}
     single { StorageRepo() }
+    single { ChannelRepo() }
 }
 
 val viewModelModule = module {
     viewModel { EditProfileViewModel(get(), get(), get()) }
     viewModel { SplashViewModel(get()) }
     viewModel { LoginViewModel(get(), get())}
-    viewModel {NewChatViewModel (get(), get())}
+    viewModel {NewChatViewModel (get(), get(), get())}
 }

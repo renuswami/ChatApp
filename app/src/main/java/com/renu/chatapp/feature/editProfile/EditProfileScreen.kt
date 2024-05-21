@@ -173,6 +173,10 @@ fun EditProfileScreen(
                 }
             }
 
+            //TODO : Min, Max date
+            // TODO : Make DOB compulsary
+            // TODO : Change color of OutlinedTextField to enabled when disabled
+
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxSize()

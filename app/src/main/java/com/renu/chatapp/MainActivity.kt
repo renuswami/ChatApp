@@ -14,6 +14,8 @@ import com.streamliners.base.uiEvent.UiEventDialogs
 
 class MainActivity : BaseActivity() {
 
+    //TODO : Improve navigaation using popUpTo
+
     override var buildType: String = BuildConfig.BUILD_TYPE
 
     override fun onCreate(savedInstanceState: Bundle?) {

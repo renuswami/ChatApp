@@ -27,9 +27,12 @@ import com.renu.chatapp.ui.theme.Neutral50
 
 @Composable
 fun UserCard(
-    user: User
+    user: User,
+    onClick: ()-> Unit
 ) {
-    Card {
+    Card (
+        onClick = onClick
+    ){
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -73,6 +76,7 @@ fun UserPrewiew() {
             bio = "",
             gender = Gender.Male,
             dob = ""
-        )
+        ),
+        onClick = {}
     )
 }
