@@ -52,8 +52,21 @@ fun MainActivity.CharAppNavHost() {
             )
         }
         composable(Screen.Home.route) {
-            HomeScreen(navController)
+            HomeScreen(
+                navController,
+                koinBaseViewModel()
+            )
         }
+
+
+
+
+
+
+
+
+
+
 
         composable(Screen.NewChat.route) {
             NewChatScreen(
