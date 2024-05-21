@@ -2,7 +2,7 @@ package com.renu.chatapp.data
 
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
-import com.renu.chatapp.data.remote.FirestoreCollections.userColl
+import com.renu.chatapp.data.remote.FirestoreCollections.usersColl
 import com.renu.chatapp.domain.model.User
 import kotlinx.coroutines.tasks.await
 
@@ -10,14 +10,14 @@ class UserRepo {
 
     suspend fun saveUser(user: User ){
         Firebase.firestore
-            .userColl()
+            .usersColl()
             .add(user)
             .await()
     }
 
     suspend fun getAllUsers(): List<User>{
         return Firebase.firestore
-            .userColl()
+            .usersColl()
             .get()
             .await()
             .toObjects(User::class.java)
@@ -25,7 +25,7 @@ class UserRepo {
 
     suspend fun getUserWithEmail(email: String): User? {
         return Firebase.firestore
-            .userColl()
+            .usersColl()
             .whereEqualTo(User::email.name, email)
             .get()
             .await()

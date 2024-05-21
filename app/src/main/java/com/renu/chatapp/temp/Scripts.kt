@@ -1,8 +1,13 @@
 package com.renu.chatapp.temp
 
+import android.nfc.Tag
+import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
-import com.renu.chatapp.data.remote.FirestoreCollections.userColl
+import com.renu.chatapp.data.remote.ChannelRepo
+import com.renu.chatapp.data.remote.FirestoreCollections.channelsColl
+import com.renu.chatapp.data.remote.FirestoreCollections.usersColl
+import com.renu.chatapp.domain.model.Channel
 import com.renu.chatapp.domain.model.Gender
 import com.renu.chatapp.domain.model.User
 import kotlinx.coroutines.tasks.await
@@ -93,7 +98,7 @@ object Scripts {
             )
         )
 
-        val collRef = Firebase.firestore.userColl()
+        val collRef = Firebase.firestore.usersColl()
         val batch = Firebase.firestore.batch()
 
         userList.forEach{ user ->
@@ -103,6 +108,32 @@ object Scripts {
             )
         }
         batch.commit().await()
+    }
+
+    suspend fun saveDummyChannel() {
+        val channel = Channel(
+            imageUrl = null,
+            type = Channel.Type.OneToOne,
+            name = "Dummy",
+            description = null,
+            members = listOf(
+                "PLwCv91l1ADl2yAsbTEo",
+                "lXOPR9oGZ8KiURQ1xEqt"
+            ),
+            messages = emptyList()
+        )
+
+        Firebase.firestore.channelsColl()
+            .add(channel)
+            .await()
+    }
+
+    suspend fun channelQueryTest(){
+        val channel = ChannelRepo().getOneToOneChannel(
+            "PLwCv91l1ADl2yAsbTEo",
+            "lXOPR9oGZ8KiURQ1xEqt"
+        )
+        Log.i("ChatAppDD", "channelQueryTest: $channel")
     }
 }
 

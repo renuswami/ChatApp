@@ -1,7 +1,5 @@
 package com.renu.chatapp.ui
 
-import android.provider.ContactsContract.CommonDataKinds.Email
-
 sealed class Screen(
     val route: String
 ) {

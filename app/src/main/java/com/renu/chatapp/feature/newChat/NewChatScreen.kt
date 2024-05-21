@@ -12,7 +12,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.renu.chatapp.ui.comp.UserCard
 import com.streamliners.base.taskState.comp.whenLoaded
-import com.streamliners.compose.android.comp.appBar.TitleBar
 import com.streamliners.compose.android.comp.appBar.TitleBarScaffold
 
 @Composable
