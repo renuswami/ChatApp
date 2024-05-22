@@ -47,8 +47,8 @@ fun ChatScreen(
             Column(
                 Modifier.weight(1f)
             ) {
-                viewModel.channel.whenLoaded { channel ->
-                    MessagesList(channel)
+                viewModel.data.whenLoaded { data ->
+                    MessagesList(data)
                 }
             }
 

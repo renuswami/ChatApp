@@ -19,16 +19,23 @@ class ChatViewModel(
     private val localRepo: LocalRepo
 ) : BaseViewModel() {
 
-    val channel = taskStateOf<Channel>()
-    lateinit var user: User
+    class Data(
+        val channel: Channel,
+        val user: User
+    )
+
+    val data = taskStateOf<Data>()
+
     fun start(
         channelId: String
     ) {
         execute {
-            user = localRepo.getLoggedInUser()
+            val user = localRepo.getLoggedInUser()
             launch {
                 channelRepo.subscribeToChannel(channelId).collectLatest {
-                    channel.update(channelRepo.getChannel(channelId))
+                    data.update(
+                        Data(channelRepo.getChannel(channelId), user)
+                    )
                 }
             }
         }
@@ -40,11 +47,11 @@ class ChatViewModel(
         ) {
         execute{
             val message = Message(
-                sender =user.id(),
+                sender =data.value().user.id(),
                 message = messageStr,
                 mediaUrl = null
             )
-            channelRepo.sendMessage(channel.value().id(), message)
+            channelRepo.sendMessage(data.value().channel.id(), message)
             onSuccess()
         }
 
