@@ -58,16 +58,6 @@ fun MainActivity.CharAppNavHost() {
             )
         }
 
-
-
-
-
-
-
-
-
-
-
         composable(Screen.NewChat.route) {
             NewChatScreen(
                 viewModel = koinBaseViewModel(),

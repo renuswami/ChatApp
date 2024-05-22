@@ -52,7 +52,7 @@ fun HomeScreen(
 
     ) { paddingValues ->
 
-        viewModel.channels.whenLoaded { channels ->
+        viewModel.channelsState.whenLoaded { channels ->
 
             LazyColumn(
                 modifier = Modifier.padding(paddingValues),

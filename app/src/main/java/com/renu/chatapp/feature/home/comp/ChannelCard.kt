@@ -56,11 +56,11 @@ fun ChannelCard(
                     color = Color.Black
                 )
 
-                Text(
+               /* Text(
                     text = channel.members.joinToString (", "),
                     style = MaterialTheme.typography.bodyMedium,
                     color = Neutral50
-                )
+                )*/
             }
         }
     }

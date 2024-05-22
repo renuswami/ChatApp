@@ -10,19 +10,20 @@ import com.streamliners.base.BaseViewModel
 import com.streamliners.base.ext.execute
 import com.streamliners.base.taskState.load
 import com.streamliners.base.taskState.taskStateOf
+import com.streamliners.base.taskState.update
 
 class HomeViewModel(
     private val localRepo: LocalRepo,
     private val channelRepo: ChannelRepo,
     private val userRepo: UserRepo
 ) : BaseViewModel() {
-    val channels = taskStateOf<List<Channel>>()
+    val channelsState = taskStateOf<List<Channel>>()
     fun start() {
         execute {
             val userId = localRepo.getLoggedInUser().id()
 
             val users = userRepo.getAllUsers()
-            val channelsState = channelRepo.getAllChannelsOf(userId)
+            val channels = channelRepo.getAllChannelsOf(userId)
                 .map {channel ->
                     if (channel.type == Channel.Type.OneToOne){
                         val otherUserId = channel.members.find { it != userId }
@@ -37,8 +38,9 @@ class HomeViewModel(
                     } else {
                         channel
                     }
-                channelRepo.getAllChannelsOf(userId)
             }
+            channelsState.update(channels)
+
         }
     }
 }
