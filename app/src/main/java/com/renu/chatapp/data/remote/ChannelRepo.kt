@@ -2,10 +2,16 @@ package com.renu.chatapp.data.remote
 
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
 import com.renu.chatapp.data.remote.FirestoreCollections.channelsColl
 import com.renu.chatapp.domain.model.Channel
 import com.renu.chatapp.domain.model.Message
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 
@@ -30,11 +36,11 @@ class ChannelRepo {
     suspend fun createOneToOneChannel(
         currentUserId: String,
         otherUserId: String
-    ): String{
+    ): String {
         val collRef = Firebase.firestore.channelsColl()
         val id = collRef.document().id
         Firebase.firestore
-            collRef.document(id)
+        collRef.document(id)
             .set(
                 Channel(
                     imageUrl = null,
@@ -51,7 +57,7 @@ class ChannelRepo {
         return id
     }
 
-    suspend fun getAllChannelsOf(userId: String):List<Channel>{
+    suspend fun getAllChannelsOf(userId: String): List<Channel> {
         return Firebase.firestore
             .channelsColl()
             .whereEqualTo(Channel::type.name, Channel.Type.OneToOne)
@@ -61,7 +67,7 @@ class ChannelRepo {
             .toObjects(Channel::class.java)
     }
 
-    suspend fun getChannel(channelId: String):Channel{
+    suspend fun getChannel(channelId: String): Channel {
         return Firebase.firestore
             .channelsColl()
             .document(channelId)
@@ -70,11 +76,31 @@ class ChannelRepo {
             .toObject(Channel::class.java)
             ?: error("No channel found with id : $channelId")
     }
-    suspend fun sendMessage(channelId: String, message: Message){
-       Firebase.firestore
+
+    suspend fun subscribeToChannel(channelId: String): Flow<Channel> {
+        return callbackFlow {
+            val registration = Firebase.firestore
+                .channelsColl()
+                .document(channelId)
+                .addSnapshotListener { snapshot, error ->
+                    error?.let { throw it }
+                    val channel = snapshot?.toObject(Channel::class.java)
+                    channel?.let {
+                        CoroutineScope(coroutineContext).launch {
+                            send(it)
+                        }
+                    }
+                }
+            awaitClose { registration .remove() }
+        }
+
+    }
+
+    suspend fun sendMessage(channelId: String, message: Message) {
+        Firebase.firestore
             .channelsColl()
             .document(channelId)
             .update(Channel::messages.name, FieldValue.arrayUnion(message))
-           .await()
+            .await()
     }
 }

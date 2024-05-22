@@ -11,6 +11,8 @@ import com.streamliners.base.ext.execute
 import com.streamliners.base.taskState.taskStateOf
 import com.streamliners.base.taskState.update
 import com.streamliners.base.taskState.value
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class ChatViewModel(
     private val channelRepo: ChannelRepo,
@@ -24,11 +26,18 @@ class ChatViewModel(
     ) {
         execute {
             user = localRepo.getLoggedInUser()
-            channel.update(channelRepo.getChannel(channelId))
+            launch {
+                channelRepo.subscribeToChannel(channelId).collectLatest {
+                    channel.update(channelRepo.getChannel(channelId))
+                }
+            }
         }
     }
 
-    fun sendMessage(messageStr: String) {
+    fun sendMessage(
+        messageStr: String,
+        onSuccess: () -> Unit
+        ) {
         execute{
             val message = Message(
                 sender =user.id(),
@@ -36,6 +45,7 @@ class ChatViewModel(
                 mediaUrl = null
             )
             channelRepo.sendMessage(channel.value().id(), message)
+            onSuccess()
         }
 
     }
