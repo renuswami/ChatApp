@@ -1,9 +1,11 @@
 package com.renu.chatapp.data.remote
 
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.renu.chatapp.data.remote.FirestoreCollections.channelsColl
 import com.renu.chatapp.domain.model.Channel
+import com.renu.chatapp.domain.model.Message
 import kotlinx.coroutines.tasks.await
 
 
@@ -57,5 +59,22 @@ class ChannelRepo {
             .get()
             .await()
             .toObjects(Channel::class.java)
+    }
+
+    suspend fun getChannel(channelId: String):Channel{
+        return Firebase.firestore
+            .channelsColl()
+            .document(channelId)
+            .get()
+            .await()
+            .toObject(Channel::class.java)
+            ?: error("No channel found with id : $channelId")
+    }
+    suspend fun sendMessage(channelId: String, message: Message){
+       Firebase.firestore
+            .channelsColl()
+            .document(channelId)
+            .update(Channel::messages.name, FieldValue.arrayUnion(message))
+           .await()
     }
 }

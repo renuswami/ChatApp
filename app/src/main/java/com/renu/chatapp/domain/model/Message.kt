@@ -6,7 +6,7 @@ import java.lang.reflect.Constructor
 
 
 data class Message(
-    val time: Timestamp,
+    val time: Timestamp = Timestamp.now(),
     // UserId of the sender
     val sender: String,
     val message: String,

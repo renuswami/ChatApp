@@ -4,6 +4,7 @@ import com.renu.chatapp.data.LocalRepo
 import com.renu.chatapp.data.UserRepo
 import com.renu.chatapp.data.remote.ChannelRepo
 import com.renu.chatapp.data.remote.StorageRepo
+import com.renu.chatapp.feature.chat.ChatViewModel
 import com.renu.chatapp.feature.editProfile.EditProfileViewModel
 import com.renu.chatapp.feature.home.HomeViewModel
 import com.renu.chatapp.feature.login.LoginViewModel
@@ -25,4 +26,5 @@ val viewModelModule = module {
     viewModel { LoginViewModel(get(), get()) }
     viewModel { NewChatViewModel (get(), get(), get()) }
     viewModel { HomeViewModel(get(), get(), get()) }
+    viewModel { ChatViewModel(get(), get()) }
 }
