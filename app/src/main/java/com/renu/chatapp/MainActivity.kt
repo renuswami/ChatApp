@@ -31,7 +31,7 @@ class MainActivity : BaseActivity() {
                 }
             }
         }
-        runScripts()
+       // runScripts()
     }
 
     private fun runScripts() {

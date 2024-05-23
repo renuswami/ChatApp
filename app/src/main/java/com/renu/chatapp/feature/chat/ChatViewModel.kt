@@ -1,7 +1,9 @@
 package com.renu.chatapp.feature.chat
 
+import androidx.core.net.toUri
 import com.renu.chatapp.data.LocalRepo
 import com.renu.chatapp.data.remote.ChannelRepo
+import com.renu.chatapp.data.remote.StorageRepo
 import com.renu.chatapp.domain.model.Channel
 import com.renu.chatapp.domain.model.Message
 import com.renu.chatapp.domain.model.User
@@ -19,7 +21,8 @@ import kotlinx.coroutines.launch
 
 class ChatViewModel(
     private val channelRepo: ChannelRepo,
-    private val localRepo: LocalRepo
+    private val localRepo: LocalRepo,
+    private val storageRepo: StorageRepo
 ) : BaseViewModel() {
 
     sealed class ChatListItem{
@@ -108,6 +111,24 @@ class ChatViewModel(
             )
             channelRepo.sendMessage(data.value().channel.id(), message)
             onSuccess()
+        }
+    }
+
+    fun sendImage(uri: String) {
+        execute{
+            val email = localRepo.getLoggedInUser().email
+            val timestamp = System.currentTimeMillis()
+
+            // TODO : Use the ext file extension
+            val imageUrl = storageRepo.uploadFile("media/$timestamp-$email.jpg", uri.toUri())
+
+            val message = Message(
+                sender = data.value().user.id(),
+                message = "",
+                mediaUrl = imageUrl
+            )
+            channelRepo.sendMessage(data.value().channel.id(), message)
+
         }
 
     }
