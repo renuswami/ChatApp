@@ -6,6 +6,8 @@ import com.renu.chatapp.domain.model.Channel
 import com.renu.chatapp.domain.model.Message
 import com.renu.chatapp.domain.model.User
 import com.renu.chatapp.domain.model.ext.id
+import com.renu.chatapp.feature.chat.ChatViewModel.ChatListItem.ReceivedMessage
+import com.renu.chatapp.feature.chat.ChatViewModel.ChatListItem.SentMessages
 import com.streamliners.base.BaseViewModel
 import com.streamliners.base.ext.execute
 import com.streamliners.base.taskState.taskStateOf
@@ -58,26 +60,40 @@ class ChatViewModel(
         }
     }
 
-    fun createChatListItems (channel: Channel, currentUserId: String): List<ChatListItem>{
-        val chatItems = mutableListOf<ChatListItem>()
-        var prevDateString =""
-        for (message in channel.messages) {
-            val dateString = DateTimeUtils.formatTime(
-                DateTimeUtils.Format.DATE_MONTH_YEAR_1,
-                message.time.toDate().time
-            )
-            if (prevDateString != dateString){
-                chatItems.add(ChatListItem.Date(dateString))
-                prevDateString = dateString
+    private fun createChatListItems (channel: Channel, currentUserId: String): List<ChatListItem>{
+
+        return buildList {
+            var prevDateString =""
+            channel.messages.forEach {message ->
+
+                val dateString = DateTimeUtils.formatTime(
+                    DateTimeUtils.Format.DATE_MONTH_YEAR_1,
+                    message.time.toDate().time
+                )
+
+                if (prevDateString != dateString){
+                    add(ChatListItem.Date(dateString))
+                    prevDateString = dateString
+                }
+
+                val chatListItem = if (message.sender == currentUserId){
+                    SentMessages(
+                        DateTimeUtils.formatTime(
+                            DateTimeUtils.Format.HOUR_MIN_12, message.time.toDate().time
+                        ),
+                        message
+                    )
+                } else {
+                    ReceivedMessage(
+                        DateTimeUtils.formatTime(
+                            DateTimeUtils.Format.HOUR_MIN_12, message.time.toDate().time
+                        ),
+                        message
+                    )
+                }
+                add(chatListItem)
             }
-            val chatListItem = if (message.sender == currentUserId){
-                ChatListItem.SentMessages(message.time.toString(), message)
-            } else {
-                ChatListItem.ReceivedMessage(message.time.toString(), message)
-            }
-            chatItems.add(chatListItem)
         }
-        return chatItems
     }
 
     fun sendMessage(

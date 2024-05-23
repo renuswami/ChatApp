@@ -13,6 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.renu.chatapp.feature.chat.ChatViewModel
+import com.renu.chatapp.feature.chat.ChatViewModel.ChatListItem.Date
+import com.renu.chatapp.feature.chat.ChatViewModel.ChatListItem.ReceivedMessage
+import com.renu.chatapp.feature.chat.ChatViewModel.ChatListItem.SentMessages
 
 @Composable
 fun MessagesList(data: ChatViewModel.Data) {
@@ -27,27 +30,30 @@ fun MessagesList(data: ChatViewModel.Data) {
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = when (chatListItem) {
-                    is ChatViewModel.ChatListItem.SentMessages -> Alignment.CenterEnd
-
-                    is ChatViewModel.ChatListItem.ReceivedMessage -> Alignment.CenterStart
-
-                    is ChatViewModel.ChatListItem.Date -> Alignment.Center
+                    is SentMessages -> Alignment.CenterEnd
+                    is ReceivedMessage -> Alignment.CenterStart
+                    is Date -> Alignment.Center
 
                 }
             ) {
                 when (chatListItem) {
-                    is ChatViewModel.ChatListItem.Date -> {
+                    is Date -> {
                         Text(text = chatListItem.date)
                     }
-                    is ChatViewModel.ChatListItem.ReceivedMessage ->
-                        MessageCard(
-                            message = chatListItem.message
-                        )
 
-                    is ChatViewModel.ChatListItem.SentMessages ->
+                    is ReceivedMessage -> {
                         MessageCard(
-                            message = chatListItem.message
+                            message = chatListItem.message,
+                            time = chatListItem.time
                         )
+                    }
+
+                    is SentMessages -> {
+                        MessageCard(
+                            message = chatListItem.message,
+                            time = chatListItem.time
+                        )
+                    }
                 }
             }
         }
