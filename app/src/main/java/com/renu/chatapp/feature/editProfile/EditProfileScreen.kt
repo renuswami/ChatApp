@@ -35,6 +35,7 @@ import com.renu.chatapp.domain.model.Gender
 import com.renu.chatapp.domain.model.User
 import com.renu.chatapp.feature.editProfile.comp.AddImageButton
 import com.renu.chatapp.feature.editProfile.comp.ProfileImage
+import com.renu.chatapp.helper.navigate
 import com.renu.chatapp.ui.Screen
 import com.streamliners.base.taskState.comp.TaskLoadingButton
 import com.streamliners.base.taskState.comp.whenError
@@ -225,7 +226,7 @@ fun EditProfileScreen(
                                     scope.launch {
                                         snackbarHostState.showSnackbar("Registration Seccussful.")
                                     }
-                                    navController.navigate(Screen.Home.route)
+                                    navController.navigate(Screen.Home.route, Screen.EditProfile.format())
                                 },
                             )
                         }

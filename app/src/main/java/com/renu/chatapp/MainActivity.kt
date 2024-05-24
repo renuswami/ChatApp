@@ -7,14 +7,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.renu.chatapp.temp.Scripts
-import com.renu.chatapp.ui.CharAppNavHost
+import com.renu.chatapp.ui.ChatAppNavHost
 import com.renu.chatapp.ui.theme.ChatAppTheme
 import com.streamliners.base.BaseActivity
 import com.streamliners.base.uiEvent.UiEventDialogs
 
 class MainActivity : BaseActivity() {
-
-    //TODO : Improve navigaation using popUpTo
 
     override var buildType: String = BuildConfig.BUILD_TYPE
 
@@ -26,12 +24,12 @@ class MainActivity : BaseActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    CharAppNavHost()
+                    ChatAppNavHost()
                     UiEventDialogs()
                 }
             }
         }
-       // runScripts()
+        // runScripts()
     }
 
     private fun runScripts() {

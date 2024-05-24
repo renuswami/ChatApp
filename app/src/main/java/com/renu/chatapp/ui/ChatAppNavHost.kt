@@ -18,7 +18,7 @@ import com.streamliners.pickers.date.showDatePickerDialog
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun MainActivity.CharAppNavHost() {
+fun MainActivity.ChatAppNavHost() {
 
     val navController = rememberNavController()
 

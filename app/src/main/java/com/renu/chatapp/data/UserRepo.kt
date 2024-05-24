@@ -8,11 +8,11 @@ import kotlinx.coroutines.tasks.await
 
 class UserRepo {
 
-    suspend fun saveUser(user: User ){
-        Firebase.firestore
-            .usersColl()
-            .add(user)
-            .await()
+    suspend fun saveUser(user: User ): User {
+        val collRef = Firebase.firestore.usersColl()
+            val id = collRef.document().id
+            collRef.document(id).set(user).await()
+            return user.copy(id = id)
     }
 
     suspend fun getAllUsers(): List<User>{

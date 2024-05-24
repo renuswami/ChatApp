@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.renu.chatapp.domain.model.ext.id
+import com.renu.chatapp.helper.navigate
 import com.renu.chatapp.ui.Screen
 import com.renu.chatapp.ui.comp.UserCard
 import com.streamliners.base.taskState.comp.whenLoaded
@@ -43,7 +44,7 @@ fun NewChatScreen(
                                 otherUserId = user.id(),
                                 onChannelReady = {channelId ->
                                     navController.navigate(
-                                        Screen.Chat(channelId).route
+                                        Screen.Chat(channelId), Screen.NewChat
                                     )
                                 }
                             )

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.renu.chatapp.data.LocalRepo
 import com.renu.chatapp.data.UserRepo
+import com.renu.chatapp.helper.navigate
 import com.renu.chatapp.ui.Screen
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,7 +24,7 @@ class LoginViewModel @Inject constructor(
                 navController.navigate(Screen.Home.route)
             } else {
                 // Navigate to  EditProfileScreen
-                navController.navigate(Screen.EditProfile(email).route)
+                navController.navigate(Screen.EditProfile(email), Screen.Login)
             }
         }
     }

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.renu.chatapp.data.LocalRepo
+import com.renu.chatapp.helper.navigate
 import com.renu.chatapp.ui.Screen
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,9 +18,9 @@ class SplashViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             if (localRepo.isLoggedIn()) {
-                navController.navigate(Screen.Home.route)
+                navController.navigate(Screen.Home, Screen.Spalsh)
             } else {
-                navController.navigate(Screen.Login.route)
+                navController.navigate(Screen.Login, Screen.Spalsh)
             }
         }
     }

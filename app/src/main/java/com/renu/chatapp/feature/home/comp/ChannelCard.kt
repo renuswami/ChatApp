@@ -38,7 +38,6 @@ fun ChannelCard(
             verticalAlignment = Alignment.CenterVertically
         ){
             AsyncImage(
-                // TODO : If OneToOne, show otherUser.profileImage otherwise channel.imageUri
                 uri = channel.imageUrl ?: "",
                 modifier = Modifier
                     .size(42.dp)
@@ -48,8 +47,6 @@ fun ChannelCard(
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                // TODO : If OneToOne, show otherUser.name otherwise channel.name
-
                 Text(
                     text = channel.name,
                     style = MaterialTheme.typography.titleLarge,

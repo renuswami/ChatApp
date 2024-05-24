@@ -14,29 +14,28 @@ import com.streamliners.pickers.media.PickedMedia
 import javax.inject.Inject
 
 class EditProfileViewModel @Inject constructor(
-    private val userRepo:UserRepo,
+    private val userRepo: UserRepo,
     private val localRepo: LocalRepo,
     private val storageRepo: StorageRepo
-): BaseViewModel(){
+) : BaseViewModel() {
 
     val saveProfileTask = taskStateOf<Unit>()
     fun saveUser(
         user: User,
         image: PickedMedia?,
         onSuccess: () -> Unit,
-    ){        execute(showLoadingDialog = false){
-        saveProfileTask.load {
-            val updatedUser = user.copy(
-                profileImageUrl = uplaodProfileImage(user.email, image)
-            )
+    ) {
+        execute(showLoadingDialog = false) {
+            saveProfileTask.load {
+                var updatedUser = user.copy(
+                    profileImageUrl = uplaodProfileImage(user.email, image)
+                )
 
-            userRepo.saveUser(
-                user = updatedUser
-            )
-            localRepo.onLoggedIn(updatedUser)
-            executeOnMain { onSuccess() }
+                updatedUser = userRepo.saveUser(user = updatedUser)
+                localRepo.onLoggedIn(updatedUser)
+                executeOnMain { onSuccess() }
+            }
         }
-    }
 
     }
 
