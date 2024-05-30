@@ -36,7 +36,7 @@ class MainActivity : BaseActivity() {
         execute {
             Scripts.saveDummyChannel()
             Scripts.channelQueryTest()
-         //   Scripts.saveDummyUsers()
+           // Scripts.saveDummyUsers()
         }
     }
 }

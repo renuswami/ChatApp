@@ -63,12 +63,13 @@ fun EditProfileScreen(
     viewModel: EditProfileViewModel,
     email: String,
     navController: NavHostController,
-    showDatePicker: ShowDatePicker
+    showDatePicker: ShowDatePicker,
 ) {
 
     val mediaPickerDialogState = rememberMediaPickerDialogState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+
 
     Scaffold(topBar = {
         TopAppBar(
@@ -224,7 +225,7 @@ fun EditProfileScreen(
                                 image = image.value,
                                 onSuccess = {
                                     scope.launch {
-                                        snackbarHostState.showSnackbar("Registration Seccussful.")
+                                        snackbarHostState.showSnackbar("Registration Successful.")
                                     }
                                     navController.navigate(Screen.Home.route, Screen.EditProfile.format())
                                 },
