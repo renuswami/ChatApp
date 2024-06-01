@@ -83,12 +83,14 @@ dependencies {
     implementation(libs.firebase.ui.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
+    implementation(libs.firebase.messaging)
 
     // DroidLibs
     implementation(libs.droidlibs.compose.android)
     implementation(libs.droidlibs.pickers)
     implementation(libs.droidlibs.base)
     implementation(libs.droidlibs.utils)
+    implementation(libs.droidlibs.helpers)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

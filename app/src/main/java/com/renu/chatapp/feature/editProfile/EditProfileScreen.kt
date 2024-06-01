@@ -54,7 +54,7 @@ import com.streamliners.pickers.media.MediaPickerDialogState
 import com.streamliners.pickers.media.MediaType
 import com.streamliners.pickers.media.PickedMedia
 import com.streamliners.pickers.media.rememberMediaPickerDialogState
-import com.streamliners.utils.DateTimeUtils.Format.DATE_MONTH_YEAR_2
+import com.streamliners.utils.DateTimeUtils
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -185,7 +185,7 @@ fun EditProfileScreen(
                     .clickable {
                         showDatePicker(
                             DatePickerDialog.Params(
-                                format = DATE_MONTH_YEAR_2,
+                                format = DateTimeUtils.Format.DATE_MONTH_YEAR_2,
                                 prefill = dob?.ifBlank { null },
                                 onPicked = { date ->
                                     dob = date

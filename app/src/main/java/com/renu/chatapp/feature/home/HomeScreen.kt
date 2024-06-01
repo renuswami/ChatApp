@@ -22,22 +22,20 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavHostController
-import com.renu.chatapp.domain.model.User
 import com.renu.chatapp.domain.model.ext.id
 import com.renu.chatapp.feature.home.comp.ChannelCard
 import com.renu.chatapp.helper.navigate
 import com.renu.chatapp.ui.Screen
 import com.streamliners.base.taskState.comp.whenLoaded
 import com.streamliners.compose.comp.CenterText
+import com.streamliners.helpers.NotificationHelper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavHostController,
     viewModel: HomeViewModel,
-    user: User
 ) {
 
 
@@ -98,4 +96,5 @@ fun HomeScreen(
             }
         }
     }
+    NotificationHelper.PermissionsSetup()
 }
