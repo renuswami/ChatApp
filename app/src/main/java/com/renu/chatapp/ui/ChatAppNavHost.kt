@@ -32,7 +32,7 @@ fun MainActivity.ChatAppNavHost() {
         }
 
         composable(Screen.Login.route) {
-            LoginScreen(navController, koinViewModel())
+            LoginScreen(navController, koinBaseViewModel())
         }
 
         composable(
