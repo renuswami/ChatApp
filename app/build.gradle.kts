@@ -48,6 +48,8 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/INDEX.LIST"
+            excludes += "/META-INF/DEPENDENCIES"
         }
     }
 }
@@ -73,13 +75,18 @@ dependencies {
     implementation(libs.androidx.datastore.core)
     implementation(libs.gson)
     implementation(libs.koin.android)
+    implementation(libs.google.auth.library.oauth2.http)
 
     //Coil
     implementation(libs.coil.compose)
 
+    //ktor
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
+
     //firebase
     implementation(platform(libs.firebase.bom))
-    implementation("com.google.firebase:firebase-analytics")
+    implementation(libs.firebase.analytics)
     implementation(libs.firebase.ui.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
@@ -91,6 +98,7 @@ dependencies {
     implementation(libs.droidlibs.base)
     implementation(libs.droidlibs.utils)
     implementation(libs.droidlibs.helpers)
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

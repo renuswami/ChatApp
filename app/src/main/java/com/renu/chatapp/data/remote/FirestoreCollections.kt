@@ -6,4 +6,5 @@ object FirestoreCollections {
 
     fun FirebaseFirestore.usersColl() = collection("users")
     fun FirebaseFirestore.channelsColl() = collection("channels")
+    fun FirebaseFirestore.otherColl() = collection("other")
 }

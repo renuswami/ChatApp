@@ -8,6 +8,7 @@ import com.renu.chatapp.domain.model.Channel
 import com.renu.chatapp.domain.model.Message
 import com.renu.chatapp.domain.model.User
 import com.renu.chatapp.domain.model.ext.id
+import com.renu.chatapp.domain.usecase.NewMessageNotifier
 import com.renu.chatapp.feature.chat.ChatViewModel.ChatListItem.ReceivedMessage
 import com.renu.chatapp.feature.chat.ChatViewModel.ChatListItem.SentMessages
 import com.streamliners.base.BaseViewModel
@@ -22,7 +23,8 @@ import kotlinx.coroutines.launch
 class ChatViewModel(
     private val channelRepo: ChannelRepo,
     private val localRepo: LocalRepo,
-    private val storageRepo: StorageRepo
+    private val storageRepo: StorageRepo,
+    private val newMessageNotifier: NewMessageNotifier
 ) : BaseViewModel() {
 
     sealed class ChatListItem{
@@ -110,6 +112,7 @@ class ChatViewModel(
                 mediaUrl = null
             )
             channelRepo.sendMessage(data.value().channel.id(), message)
+            newMessageNotifier.notify()
             onSuccess()
         }
     }
@@ -128,6 +131,7 @@ class ChatViewModel(
                 mediaUrl = imageUrl
             )
             channelRepo.sendMessage(data.value().channel.id(), message)
+            newMessageNotifier.notify()
 
         }
 
