@@ -48,7 +48,7 @@ fun MainActivity.ChatAppNavHost() {
                 navController = navController,
                 viewModel = koinBaseViewModel(),
                 email = email,
-                showDatePicker = ::showDatePickerDialog
+                showDatePicker = ::showDatePickerDialog,
             )
         }
         composable(Screen.Home.route) {
