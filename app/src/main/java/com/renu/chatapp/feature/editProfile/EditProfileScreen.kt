@@ -21,6 +21,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,6 +58,7 @@ import com.streamliners.pickers.media.rememberMediaPickerDialogState
 import com.streamliners.utils.DateTimeUtils
 import kotlinx.coroutines.launch
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(
@@ -69,26 +71,32 @@ fun EditProfileScreen(
     val mediaPickerDialogState = rememberMediaPickerDialogState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val userData by viewModel.userState.collectAsState()
 
+    LaunchedEffect(key1 = true) {
+        viewModel.loadUser()
+    }
 
-    Scaffold(topBar = {
-        TopAppBar(
-            title = { Text(text = "Profile") },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                titleContentColor = Color.White
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Profile") },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = Color.White
+                )
             )
-        )
-    }, snackbarHost = {
-        //TODO : SnackBar not visible when keyboard is open
-        SnackbarHost(
-            hostState = snackbarHostState
-        )
-    }) { paddingValues ->
+        }, snackbarHost = {
+            //TODO : SnackBar not visible when keyboard is open
+            SnackbarHost(
+                hostState = snackbarHostState
+            )
+        }) { paddingValues ->
 
         val image = remember {
             mutableStateOf<PickedMedia?>(null)
         }
+
 
         val nameInput = remember {
             mutableStateOf(TextInputState(label = "Name", inputConfig = InputConfig.text {
@@ -102,6 +110,13 @@ fun EditProfileScreen(
                 maxLength = 25
             }))
         }
+        LaunchedEffect(userData) {
+            userData?.let { user ->
+                nameInput.value = nameInput.value.copy(user.name)
+                bioInput.value = bioInput.value.copy(user.bio)
+            }
+        }
+
         val gender = remember { mutableStateOf<Gender?>(null) }
 
         var genderError by remember { mutableStateOf(false) }
@@ -150,7 +165,7 @@ fun EditProfileScreen(
 
             TextInputLayout(state = nameInput)
             OutlinedTextField(modifier = Modifier.fillMaxSize(),
-                value = email,
+                value = userData?.email ?: "",
                 onValueChange = {},
                 enabled = false,
                 label = { Text(text = "Email") })
@@ -193,7 +208,7 @@ fun EditProfileScreen(
                             )
                         )
                     },
-                value = dob ?: "",
+                value =  userData?.dob ?: "",
                 onValueChange = {},
                 enabled = false,
                 label = { Text(text = "Date of birth") })
@@ -227,7 +242,10 @@ fun EditProfileScreen(
                                     scope.launch {
                                         snackbarHostState.showSnackbar("Registration Successful.")
                                     }
-                                    navController.navigate(Screen.Home.route, Screen.EditProfile.format())
+                                    navController.navigate(
+                                        Screen.Home.route,
+                                        Screen.EditProfile.format()
+                                    )
                                 },
                             )
                         }
