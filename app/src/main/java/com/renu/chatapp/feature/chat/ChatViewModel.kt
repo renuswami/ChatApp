@@ -112,8 +112,26 @@ class ChatViewModel(
                 mediaUrl = null
             )
             channelRepo.sendMessage(data.value().channel.id(), message)
-            newMessageNotifier.notify()
+            notifyOtherUser(messageStr)
             onSuccess()
+        }
+    }
+
+    private fun notifyOtherUser(message: String) {
+
+    val channel = data.value().channel
+        val user = data.value().user
+
+        if (channel.type == Channel.Type.OneToOne) {
+            val otherUserId = channel.members.find { it != user.id() }
+                ?: error("otherUserId not found")
+            execute(false) {
+                newMessageNotifier.notify(
+                    senderName = data.value().user.name,
+                    userId = otherUserId,
+                    message = message
+                )
+            }
         }
     }
 
@@ -131,7 +149,7 @@ class ChatViewModel(
                 mediaUrl = imageUrl
             )
             channelRepo.sendMessage(data.value().channel.id(), message)
-            newMessageNotifier.notify()
+            notifyOtherUser("Sent an image")
 
         }
 

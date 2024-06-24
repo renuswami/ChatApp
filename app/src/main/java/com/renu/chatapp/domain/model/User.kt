@@ -10,7 +10,8 @@ data class User(
     val profileImageUrl: String?,
     val bio: String,
     val gender: Gender,
-    val dob: String?
+    val dob: String?,
+    val fcmToken: String?
 ){
-    constructor(): this(null, "", "", "", "", Gender.Male, "")
+    constructor(): this(null, "", "", "", "", Gender.Male, "", null)
 }

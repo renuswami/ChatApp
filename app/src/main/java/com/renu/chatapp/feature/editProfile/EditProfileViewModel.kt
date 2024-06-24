@@ -3,6 +3,8 @@ package com.renu.chatapp.feature.editProfile
 import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Firebase
+import com.google.firebase.messaging.messaging
 import com.renu.chatapp.data.LocalRepo
 import com.renu.chatapp.data.UserRepo
 import com.renu.chatapp.data.remote.StorageRepo
@@ -17,6 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class EditProfileViewModel @Inject constructor(
@@ -37,12 +40,15 @@ class EditProfileViewModel @Inject constructor(
     ) {
         execute(showLoadingDialog = false) {
             saveProfileTask.load {
+                val token = Firebase.messaging.token.await()
+
                 var updatedUser = user.copy(
-                    profileImageUrl = uplaodProfileImage(user.email, image)
+                    profileImageUrl = uplaodProfileImage(user.email, image),
+                    fcmToken = token
                 )
 
                 updatedUser = userRepo.saveUser(user = updatedUser)
-                localRepo.onLoggedIn(updatedUser)
+                localRepo.upsertCurrentUser(updatedUser)
                 executeOnMain { onSuccess() }
             }
         }

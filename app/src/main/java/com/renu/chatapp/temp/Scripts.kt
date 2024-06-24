@@ -1,6 +1,5 @@
 package com.renu.chatapp.temp
 
-import android.nfc.Tag
 import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
@@ -22,7 +21,8 @@ object Scripts {
                 profileImageUrl = null,
                 bio = "I'm Alice",
                 gender = Gender.Female,
-                dob = "1990-01-01"
+                dob = "1990-01-01",
+                fcmToken = null
             ),
             User(
                 name = "Bob",
@@ -30,7 +30,8 @@ object Scripts {
                 profileImageUrl = null,
                 bio = "I'm Bob",
                 gender = Gender.Male,
-                dob = "1995-05-05"
+                dob = "1995-05-05",
+                fcmToken = null
             ),
             User(
                 name = "Charlie",
@@ -38,7 +39,8 @@ object Scripts {
                 profileImageUrl = null,
                 bio = "I'm Charlie",
                 gender = Gender.Male,
-                dob = "1985-10-10"
+                dob = "1985-10-10",
+                fcmToken = null
             ),
             User(
                 name = "Diana",
@@ -46,7 +48,8 @@ object Scripts {
                 profileImageUrl = null,
                 bio = "I'm Diana",
                 gender = Gender.Female,
-                dob = "1988-09-15"
+                dob = "1988-09-15",
+                fcmToken = null
             ),
             User(
                 name = "Eleanor",
@@ -54,7 +57,8 @@ object Scripts {
                 profileImageUrl = null,
                 bio = "I'm Eleanor",
                 gender = Gender.Female,
-                dob = "1992-07-20"
+                dob = "1992-07-20",
+                fcmToken = null
             ),
             User(
                 name = "Frank",
@@ -62,7 +66,8 @@ object Scripts {
                 profileImageUrl = null,
                 bio = "I'm Frank",
                 gender = Gender.Male,
-                dob = "1980-03-25"
+                dob = "1980-03-25",
+                fcmToken = null
             ),
             User(
                 name = "Grace",
@@ -70,7 +75,8 @@ object Scripts {
                 profileImageUrl = null,
                 bio = "I'm Grace",
                 gender = Gender.Female,
-                dob = "1997-11-30"
+                dob = "1997-11-30",
+                fcmToken = null
             ),
             User(
                 name = "Henry",
@@ -78,7 +84,8 @@ object Scripts {
                 profileImageUrl = null,
                 bio = "I'm Henry",
                 gender = Gender.Male,
-                dob = "1987-04-12"
+                dob = "1987-04-12",
+                fcmToken = null
             ),
             User(
                 name = "Isabel",
@@ -86,7 +93,8 @@ object Scripts {
                 profileImageUrl = null,
                 bio = "I'm Isabel",
                 gender = Gender.Female,
-                dob = "1983-06-18"
+                dob = "1983-06-18",
+                fcmToken = null
             ),
             User(
                 name = "Jack",
@@ -94,7 +102,8 @@ object Scripts {
                 profileImageUrl = null,
                 bio = "I'm Jack",
                 gender = Gender.Male,
-                dob = "1994-02-08"
+                dob = "1994-02-08",
+                fcmToken = null
             )
         )
 

@@ -1,5 +1,6 @@
 package com.renu.chatapp.domain.usecase
 
+import com.renu.chatapp.data.UserRepo
 import com.renu.chatapp.data.remote.OtherRepo
 import com.renu.chatapp.helper.fcm.AndroidPayload
 import com.renu.chatapp.helper.fcm.FcmMessage
@@ -8,17 +9,25 @@ import com.renu.chatapp.helper.fcm.FcmSender
 import com.renu.chatapp.helper.fcm.NotificationPayload
 
 class NewMessageNotifier(
+    private val userRepo: UserRepo,
     private val otherRepo: OtherRepo,
     private val fcmSender: FcmSender
 ) {
-    suspend fun notify() {
+    suspend fun notify(
+        senderName: String,
+        userId: String,
+        message: String
+    ) {
+        val token = userRepo.getUserById(userId).fcmToken ?: return
         val svcAcJson = otherRepo.getServiceAccountJson()
+
+
         val payload = FcmPayload(
-            FcmMessage.forTopic(
-                topic = "general",
+            FcmMessage.forToken(
+                token  = token,
                 notification = NotificationPayload(
-                    title = "Sample notification",
-                    body = "This notification was sent from App using ktor and FCM REST API"
+                    title = "New Message",
+                    body = "$senderName : $message"
                 ),
                 android = AndroidPayload(
                     priority = "high"

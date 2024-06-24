@@ -11,33 +11,34 @@ data class FcmMessage(
     val android: AndroidPayload?
 
 ){
-    companion object{
+    companion object {
         fun forTopic(
             topic: String?,
             notification: NotificationPayload? = null,
             data: Map<String, Any>? = null,
             android: AndroidPayload? = null
-        ): FcmMessage{
+        ): FcmMessage {
             return FcmMessage(
                 topic = topic,
                 token = null,
                 notification, data, android
             )
         }
-    }
 
-    fun forToken(
-        token: String?,
-        notification: NotificationPayload? = null,
-        data: Map<String, Any>? = null,
-        android: AndroidPayload? = null
 
-    ): FcmMessage{
-        return FcmMessage(
-            topic = null,
-            token = token,
-            notification, data, android
-        )
+        fun forToken(
+            token: String?,
+            notification: NotificationPayload? = null,
+            data: Map<String, Any>? = null,
+            android: AndroidPayload? = null
+
+        ): FcmMessage {
+            return FcmMessage(
+                topic = null,
+                token = token,
+                notification, data, android
+            )
+        }
     }
 }
 

@@ -6,7 +6,7 @@ import com.renu.chatapp.helper.DataStoreUtil
 class LocalRepo (
     private val dataStoreUtil: DataStoreUtil
     ){
-    suspend fun onLoggedIn(user: User){
+    suspend fun upsertCurrentUser(user: User){
         dataStoreUtil.setData("user", user)
     }
 

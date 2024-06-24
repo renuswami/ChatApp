@@ -46,6 +46,7 @@ import com.streamliners.compose.comp.textInput.config.InputConfig
 import com.streamliners.compose.comp.textInput.config.text
 import com.streamliners.compose.comp.textInput.state.TextInputState
 import com.streamliners.compose.comp.textInput.state.allHaveValidInputs
+import com.streamliners.compose.comp.textInput.state.update
 import com.streamliners.compose.comp.textInput.state.value
 import com.streamliners.pickers.date.DatePickerDialog
 import com.streamliners.pickers.date.ShowDatePicker
@@ -110,14 +111,17 @@ fun EditProfileScreen(
                 maxLength = 25
             }))
         }
-        LaunchedEffect(userData) {
-            userData?.let { user ->
-                nameInput.value = nameInput.value.copy(user.name)
-                bioInput.value = bioInput.value.copy(user.bio)
-            }
-        }
 
         val gender = remember { mutableStateOf<Gender?>(null) }
+
+        LaunchedEffect(userData) {
+            userData?.let { user ->
+                nameInput.update(user.name)
+                bioInput.update(user.bio)
+                gender.value = user.gender
+               
+            }
+        }
 
         var genderError by remember { mutableStateOf(false) }
 
@@ -182,10 +186,10 @@ fun EditProfileScreen(
                         title = "Gender",
                         state = gender,
                         options = Gender.entries.toList(),
-                        labelExtractor = { it.name },
+                        labelExtractor = { it.name }
                     )
                     if (genderError) {
-                        Text(text = "Requried!")
+                        Text(text = "Required!")
                     }
                 }
             }
@@ -233,7 +237,8 @@ fun EditProfileScreen(
                                 profileImageUrl = null,
                                 bio = bioInput.value(),
                                 gender = it,
-                                dob = dob
+                                dob = dob,
+                                fcmToken = null
                             )
                             viewModel.saveUser(
                                 user = user,

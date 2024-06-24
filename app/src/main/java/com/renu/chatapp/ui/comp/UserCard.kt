@@ -23,7 +23,6 @@ import com.renu.chatapp.domain.model.Gender
 import com.renu.chatapp.domain.model.User
 import com.renu.chatapp.domain.model.ext.profileImageUrl
 import com.renu.chatapp.ui.general.AsyncImage
-import com.renu.chatapp.ui.theme.Neutral50
 
 @Composable
 fun UserCard(
@@ -75,7 +74,8 @@ fun UserPrewiew() {
             profileImageUrl = null,
             bio = "",
             gender = Gender.Male,
-            dob = ""
+            dob = "",
+            fcmToken = null
         ),
         onClick = {}
     )

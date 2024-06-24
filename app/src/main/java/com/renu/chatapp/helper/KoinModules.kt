@@ -28,7 +28,7 @@ val appModule = module {
     single { HttpClient(CIO) { expectSuccess = true } }
     single { FcmSender(get()) }
 
-    single { NewMessageNotifier(get(), get()) }
+    single { NewMessageNotifier(get(), get(), get()) }
 }
 
 val viewModelModule = module {
