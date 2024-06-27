@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.mr0xf00.easycrop.AspectRatio
 import com.renu.chatapp.domain.model.Gender
 import com.renu.chatapp.domain.model.User
 import com.renu.chatapp.feature.editProfile.comp.AddImageButton
@@ -51,6 +52,7 @@ import com.streamliners.compose.comp.textInput.state.value
 import com.streamliners.pickers.date.DatePickerDialog
 import com.streamliners.pickers.date.ShowDatePicker
 import com.streamliners.pickers.media.FromGalleryType
+import com.streamliners.pickers.media.MediaPickerCropParams
 import com.streamliners.pickers.media.MediaPickerDialog
 import com.streamliners.pickers.media.MediaPickerDialogState
 import com.streamliners.pickers.media.MediaType
@@ -140,10 +142,15 @@ fun EditProfileScreen(
         ) {
 
             val initImagePicker = {
-                mediaPickerDialogState.value = MediaPickerDialogState.Visible(
+                mediaPickerDialogState.value = MediaPickerDialogState.ShowMediaPicker(
                     type = MediaType.Image,
                     allowMultiple = false,
-                    fromGalleryType = FromGalleryType.VisualMediaPicker
+                    fromGalleryType = FromGalleryType.VisualMediaPicker,
+                    cropParams = MediaPickerCropParams.Enabled(
+                        showAspectRatioSelectionButton = false,
+                        showShapeCropButton = false,
+                        lockAspectRatio = AspectRatio(1, 1)
+                    )
                 ) { getList ->
                     scope.launch {
                         val list = getList()
