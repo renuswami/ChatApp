@@ -12,6 +12,7 @@ import com.renu.chatapp.feature.editProfile.EditProfileScreen
 import com.renu.chatapp.feature.home.HomeScreen
 import com.renu.chatapp.feature.login.LoginScreen
 import com.renu.chatapp.feature.newChat.NewChatScreen
+import com.renu.chatapp.feature.newGroupChat.NewGroupChatScreen
 import com.renu.chatapp.feature.splash.SplashScreen
 import com.streamliners.base.ext.koinBaseViewModel
 import com.streamliners.pickers.date.showDatePickerDialog
@@ -60,6 +61,13 @@ fun MainActivity.ChatAppNavHost() {
 
         composable(Screen.NewChat.route) {
             NewChatScreen(
+                viewModel = koinBaseViewModel(),
+                navController = navController
+            )
+        }
+
+        composable(Screen.NewGroupChat.route) {
+            NewGroupChatScreen(
                 viewModel = koinBaseViewModel(),
                 navController = navController
             )

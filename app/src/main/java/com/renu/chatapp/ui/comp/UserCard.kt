@@ -3,11 +3,13 @@ package com.renu.chatapp.ui.comp
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,13 +25,18 @@ import com.renu.chatapp.domain.model.Gender
 import com.renu.chatapp.domain.model.User
 import com.renu.chatapp.domain.model.ext.profileImageUrl
 import com.renu.chatapp.ui.general.AsyncImage
+import com.renu.chatapp.ui.theme.Neutral50
 
 @Composable
 fun UserCard(
+    modifier: Modifier = Modifier,
     user: User,
+    checked: Boolean? = null,
+    onCheckedChange: (Boolean) -> Unit = {},
     onClick: ()-> Unit
 ) {
     Card (
+        modifier = Modifier.fillMaxSize(),
         onClick = onClick
     ){
         Row(
@@ -55,11 +62,15 @@ fun UserCard(
                     color = Color.Black
                 )
 
-                /*Text(
+                Text(
                     text = user.email,
                     style = MaterialTheme.typography.bodyMedium,
                     color = Neutral50
-                )*/
+                )
+            }
+
+            checked?.let {
+                Checkbox(checked = it, onCheckedChange = onCheckedChange)
             }
         }
     }

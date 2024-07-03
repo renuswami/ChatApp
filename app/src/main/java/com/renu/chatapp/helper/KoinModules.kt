@@ -11,6 +11,7 @@ import com.renu.chatapp.feature.editProfile.EditProfileViewModel
 import com.renu.chatapp.feature.home.HomeViewModel
 import com.renu.chatapp.feature.login.LoginViewModel
 import com.renu.chatapp.feature.newChat.NewChatViewModel
+import com.renu.chatapp.feature.newGroupChat.NewGroupChatViewModel
 import com.renu.chatapp.feature.splash.SplashViewModel
 import com.renu.chatapp.helper.fcm.FcmSender
 import io.ktor.client.HttpClient
@@ -36,6 +37,7 @@ val viewModelModule = module {
     viewModel { SplashViewModel(get()) }
     viewModel { LoginViewModel(get(), get()) }
     viewModel { NewChatViewModel (get(), get(), get()) }
+    viewModel { NewGroupChatViewModel(get(), get(), get(), get() ) }
     viewModel { HomeViewModel(get(), get(), get()) }
     viewModel { ChatViewModel(get(), get(), get(), get()) }
 }

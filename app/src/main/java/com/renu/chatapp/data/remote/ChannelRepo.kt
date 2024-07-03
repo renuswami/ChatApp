@@ -2,7 +2,6 @@ package com.renu.chatapp.data.remote
 
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
 import com.renu.chatapp.data.remote.FirestoreCollections.channelsColl
 import com.renu.chatapp.domain.model.Channel
@@ -57,10 +56,34 @@ class ChannelRepo {
         return id
     }
 
+    suspend fun createGroupChannel(
+        currentUserId: String,
+        name: String,
+        description: String?,
+        groupImageUrl: String?,
+        members: List<String>,
+    ): String {
+        val collRef = Firebase.firestore.channelsColl()
+        val id = collRef.document().id
+        Firebase.firestore
+        collRef.document(id)
+            .set(
+                Channel(
+                    imageUrl = groupImageUrl,
+                    type = Channel.Type.Group,
+                    name = name,
+                    description = description,
+                    members = members + currentUserId,
+                    messages = emptyList()
+                )
+            )
+            .await()
+        return id
+    }
+
     suspend fun getAllChannelsOf(userId: String): List<Channel> {
         return Firebase.firestore
             .channelsColl()
-            .whereEqualTo(Channel::type.name, Channel.Type.OneToOne)
             .whereArrayContains(Channel::members.name, userId)
             .get()
             .await()

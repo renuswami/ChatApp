@@ -32,13 +32,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.mr0xf00.easycrop.AspectRatio
 import com.renu.chatapp.domain.model.Gender
 import com.renu.chatapp.domain.model.User
-import com.renu.chatapp.feature.editProfile.comp.AddImageButton
 import com.renu.chatapp.feature.editProfile.comp.ProfileImage
 import com.renu.chatapp.helper.navigate
 import com.renu.chatapp.ui.Screen
+import com.renu.chatapp.helper.MediaPickerDialogExt
+import com.renu.chatapp.ui.comp.AddImageButton
 import com.streamliners.base.taskState.comp.TaskLoadingButton
 import com.streamliners.base.taskState.comp.whenError
 import com.streamliners.compose.comp.select.RadioGroup
@@ -51,11 +51,7 @@ import com.streamliners.compose.comp.textInput.state.update
 import com.streamliners.compose.comp.textInput.state.value
 import com.streamliners.pickers.date.DatePickerDialog
 import com.streamliners.pickers.date.ShowDatePicker
-import com.streamliners.pickers.media.FromGalleryType
-import com.streamliners.pickers.media.MediaPickerCropParams
 import com.streamliners.pickers.media.MediaPickerDialog
-import com.streamliners.pickers.media.MediaPickerDialogState
-import com.streamliners.pickers.media.MediaType
 import com.streamliners.pickers.media.PickedMedia
 import com.streamliners.pickers.media.rememberMediaPickerDialogState
 import com.streamliners.utils.DateTimeUtils
@@ -79,7 +75,6 @@ fun EditProfileScreen(
     LaunchedEffect(key1 = true) {
         viewModel.loadUser()
     }
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -99,8 +94,6 @@ fun EditProfileScreen(
         val image = remember {
             mutableStateOf<PickedMedia?>(null)
         }
-
-
         val nameInput = remember {
             mutableStateOf(TextInputState(label = "Name", inputConfig = InputConfig.text {
                 minLength = 3
@@ -113,7 +106,6 @@ fun EditProfileScreen(
                 maxLength = 25
             }))
         }
-
         val gender = remember { mutableStateOf<Gender?>(null) }
 
         LaunchedEffect(userData) {
@@ -121,12 +113,10 @@ fun EditProfileScreen(
                 nameInput.update(user.name)
                 bioInput.update(user.bio)
                 gender.value = user.gender
-               
+
             }
         }
-
         var genderError by remember { mutableStateOf(false) }
-
         var dob by remember { mutableStateOf<String?>("") }
 
         LaunchedEffect(key1 = gender.value) {
@@ -140,39 +130,23 @@ fun EditProfileScreen(
                 .padding(paddingValues)
                 .padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-
-            val initImagePicker = {
-                mediaPickerDialogState.value = MediaPickerDialogState.ShowMediaPicker(
-                    type = MediaType.Image,
-                    allowMultiple = false,
-                    fromGalleryType = FromGalleryType.VisualMediaPicker,
-                    cropParams = MediaPickerCropParams.Enabled(
-                        showAspectRatioSelectionButton = false,
-                        showShapeCropButton = false,
-                        lockAspectRatio = AspectRatio(1, 1)
-                    )
-                ) { getList ->
-                    scope.launch {
-                        val list = getList()
-                        list.firstOrNull()?.let {
-                            image.value = it
-                        }
-                    }
-                }
-            }
-
             image.value?.let {
                 ProfileImage(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     pickedMedia = it,
-                    onClick = initImagePicker
+                    onClick = {
+                        launchMediaPickerDialogForProfileImage(mediaPickerDialogState, scope, image)
+                    }
                 )
             } ?: run {
                 AddImageButton(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
-                    onClick = initImagePicker
+                    onClick = {
+                        launchMediaPickerDialogForProfileImage(mediaPickerDialogState, scope, image)
+                    }
                 )
             }
+
 
             TextInputLayout(state = nameInput)
             OutlinedTextField(modifier = Modifier.fillMaxSize(),
@@ -219,7 +193,7 @@ fun EditProfileScreen(
                             )
                         )
                     },
-                value =  userData?.dob ?: "",
+                value = userData?.dob ?: "",
                 onValueChange = {},
                 enabled = false,
                 label = { Text(text = "Date of birth") })
@@ -277,3 +251,4 @@ fun EditProfileScreen(
         authority = "com.renu.chatapp.fileprovider"
     )
 }
+
