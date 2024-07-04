@@ -135,16 +135,36 @@ class ChatViewModel(
     val channel = data.value().channel
         val user = data.value().user
 
-        if (channel.type == Channel.Type.OneToOne) {
-            val otherUserId = channel.members.find { it != user.id() }
-                ?: error("otherUserId not found")
-            execute(false) {
-                newMessageNotifier.notify(
-                    senderName = data.value().user.name,
-                    userId = otherUserId,
-                    message = message
-                )
-            }
+        when (channel.type) {
+            Channel.Type.OneToOne -> notifySingleUserUsingToken(channel, user, message)
+            Channel.Type.Group -> notifyAllOtherUsersUsingTopic(channel, message)
+        }
+    }
+
+    private fun notifyAllOtherUsersUsingTopic(channel: Channel, message: String) {
+        // TODO : Send to all users expact current user (silently recive)
+        execute(false) {
+            newMessageNotifier.notifyMultipleUserUsingTopic(
+                senderName = data.value().user.name,
+                topic = channel.id(),
+                message = message
+            )
+        }
+    }
+
+    private fun notifySingleUserUsingToken(
+        channel: Channel,
+        user: User,
+        message: String
+    ) {
+        val otherUserId = channel.members.find { it != user.id() }
+            ?: error("otherUserId not found")
+        execute(false) {
+            newMessageNotifier.notifySingleUser(
+                senderName = data.value().user.name,
+                userId = otherUserId,
+                message = message
+            )
         }
     }
 
@@ -163,8 +183,6 @@ class ChatViewModel(
             )
             channelRepo.sendMessage(data.value().channel.id(), message)
             notifyOtherUser("Sent an image")
-
         }
-
     }
 }

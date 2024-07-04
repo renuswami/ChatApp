@@ -50,8 +50,6 @@ class HomeViewModel(
 
     private fun subscribeForGroupNotifications() {
         execute(false){
-            if (localRepo.isSubscribedForGroupNotifications()) return@execute
-
             channelsState.value()
                 .filter{ it.type == Channel.Type.Group }
                 .forEach { channel ->
@@ -59,7 +57,6 @@ class HomeViewModel(
                         channel.id()
                     ).await()
                 }
-            localRepo.onSubscribedForGroupNotifications()
         }
     }
 }
