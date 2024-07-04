@@ -44,7 +44,8 @@ fun MessagesList(data: ChatViewModel.Data) {
                     is ReceivedMessage -> {
                         MessageCard(
                             message = chatListItem.message,
-                            time = chatListItem.time
+                            time = chatListItem.time,
+                            senderName = chatListItem.senderName
                         )
                     }
 

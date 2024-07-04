@@ -6,8 +6,14 @@ import com.renu.chatapp.helper.DataStoreUtil
 class LocalRepo (
     private val dataStoreUtil: DataStoreUtil
     ){
+
+    companion object{
+        private const val KEY_USER = "user"
+        private const val KEY_IS_SUBSCRIBED_FOR_GROUP_NOTIFICATIONS = "IS_SUBSCRIBED_FOR_GROUP_NOTIFICATIONS "
+    }
+
     suspend fun upsertCurrentUser(user: User){
-        dataStoreUtil.setData("user", user)
+        dataStoreUtil.setData(KEY_USER, user)
     }
 
     suspend fun getLoggedInUser(): User {
@@ -15,8 +21,16 @@ class LocalRepo (
     }
 
     private suspend fun getLoggedInUserNullble(): User? {
-        return dataStoreUtil.getData<User>("user")
+        return dataStoreUtil.getData<User>(KEY_USER)
     }
 
     suspend fun isLoggedIn() = getLoggedInUserNullble() != null
+
+    suspend fun isSubscribedForGroupNotifications(): Boolean{
+        return dataStoreUtil.getData(KEY_IS_SUBSCRIBED_FOR_GROUP_NOTIFICATIONS) ?: false
+    }
+
+    suspend fun onSubscribedForGroupNotifications(){
+        dataStoreUtil.setData(KEY_IS_SUBSCRIBED_FOR_GROUP_NOTIFICATIONS, true)
+    }
 }

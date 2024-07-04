@@ -2,6 +2,7 @@ package com.renu.chatapp.feature.chat
 
 import androidx.core.net.toUri
 import com.renu.chatapp.data.LocalRepo
+import com.renu.chatapp.data.UserRepo
 import com.renu.chatapp.data.remote.ChannelRepo
 import com.renu.chatapp.data.remote.StorageRepo
 import com.renu.chatapp.domain.model.Channel
@@ -22,6 +23,7 @@ import kotlinx.coroutines.launch
 
 class ChatViewModel(
     private val channelRepo: ChannelRepo,
+    private val userRepo: UserRepo,
     private val localRepo: LocalRepo,
     private val storageRepo: StorageRepo,
     private val newMessageNotifier: NewMessageNotifier
@@ -30,6 +32,7 @@ class ChatViewModel(
     sealed class ChatListItem{
         class ReceivedMessage(
             val time: String,
+            val senderName: String?,
             val message: Message
         ): ChatListItem()
 
@@ -55,17 +58,20 @@ class ChatViewModel(
         execute {
             val user = localRepo.getLoggedInUser()
             launch {
+                //TODO : Fetch list only if group channel
+                val users = userRepo.getAllUsers()
+
                 channelRepo.subscribeToChannel(channelId).collectLatest {
                     val channel = channelRepo.getChannel(channelId)
                     data.update(
-                        Data(channel, user, createChatListItems(channel, user.id()))
+                        Data(channel, user, createChatListItems(channel, user.id(), users))
                     )
                 }
             }
         }
     }
 
-    private fun createChatListItems (channel: Channel, currentUserId: String): List<ChatListItem>{
+    private fun createChatListItems (channel: Channel, currentUserId: String, users: List<User>): List<ChatListItem>{
 
         return buildList {
             var prevDateString =""
@@ -89,11 +95,18 @@ class ChatViewModel(
                         message
                     )
                 } else {
+                    val name =
+                        if(channel.type == Channel.Type.Group) {
+                            users.find { it.id == message.sender }?.name
+                                ?: error("User with id ${message.sender} not found!")
+                        } else null
+
                     ReceivedMessage(
-                        DateTimeUtils.formatTime(
+                        time = DateTimeUtils.formatTime(
                             DateTimeUtils.Format.HOUR_MIN_12, message.time.toDate().time
                         ),
-                        message
+                        senderName = name,
+                        message = message
                     )
                 }
                 add(chatListItem)

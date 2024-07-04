@@ -22,37 +22,47 @@ import com.renu.chatapp.ui.theme.Neutral50
 @Composable
 fun MessageCard(
     message: Message,
-    time: String
+    time: String,
+    senderName: String? = null
 ) {
-    Card {
-        Column(
-            modifier = Modifier
-                .width(IntrinsicSize.Max)
-                .padding(horizontal = 12.dp, vertical = 8.dp),
-        ) {
-            message.mediaUrl?.let {
-                AsyncImage(
-                    uri = it,
-                    modifier = Modifier
-                        .padding(top = 4.dp, bottom = 8.dp)
-                        .widthIn(min = 150.dp, max = 220.dp),
-                    contentScale = ContentScale.FillWidth
-                )
-            }
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+    Column {
+        senderName?.let {
+            Text(
+                modifier = Modifier.padding(bottom = 4.dp),
+                text = it,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+        Card {
+            Column(
+                modifier = Modifier
+                    .width(IntrinsicSize.Max)
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
             ) {
-                Text(
-                    text = message.message,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = Color.Black
-                )
+                message.mediaUrl?.let {
+                    AsyncImage(
+                        uri = it,
+                        modifier = Modifier
+                            .padding(top = 4.dp, bottom = 8.dp)
+                            .widthIn(min = 150.dp, max = 220.dp),
+                        contentScale = ContentScale.FillWidth
+                    )
+                }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = message.message,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = Color.Black
+                    )
 
-                Text(
-                    text = time,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Neutral50
-                )
+                    Text(
+                        text = time,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Neutral50
+                    )
+                }
             }
         }
     }
