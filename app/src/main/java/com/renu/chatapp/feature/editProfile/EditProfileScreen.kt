@@ -35,9 +35,9 @@ import androidx.navigation.NavHostController
 import com.renu.chatapp.domain.model.Gender
 import com.renu.chatapp.domain.model.User
 import com.renu.chatapp.feature.editProfile.comp.ProfileImage
+import com.renu.chatapp.helper.MediaPickerDialogExt
 import com.renu.chatapp.helper.navigate
 import com.renu.chatapp.ui.Screen
-import com.renu.chatapp.helper.MediaPickerDialogExt
 import com.renu.chatapp.ui.comp.AddImageButton
 import com.streamliners.base.taskState.comp.TaskLoadingButton
 import com.streamliners.base.taskState.comp.whenError
@@ -135,14 +135,14 @@ fun EditProfileScreen(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     pickedMedia = it,
                     onClick = {
-                        launchMediaPickerDialogForProfileImage(mediaPickerDialogState, scope, image)
+                        MediaPickerDialogExt().launchMediaPickerDialogForProfileImage(mediaPickerDialogState, scope, image)
                     }
                 )
             } ?: run {
                 AddImageButton(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     onClick = {
-                        launchMediaPickerDialogForProfileImage(mediaPickerDialogState, scope, image)
+                        MediaPickerDialogExt().launchMediaPickerDialogForProfileImage(mediaPickerDialogState, scope, image)
                     }
                 )
             }

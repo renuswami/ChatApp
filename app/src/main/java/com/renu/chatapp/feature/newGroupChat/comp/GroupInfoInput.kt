@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.renu.chatapp.feature.editProfile.comp.ProfileImage
+import com.renu.chatapp.helper.MediaPickerDialogExt
 import com.renu.chatapp.ui.comp.AddImageButton
 import com.streamliners.compose.comp.textInput.TextInputLayout
 import com.streamliners.compose.comp.textInput.state.TextInputState
@@ -38,14 +39,14 @@ fun GroupInfoInput(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 pickedMedia = it,
                 onClick = {
-                    launchMediaPickerDialogForProfileImage(mediaPickerDialogState, scope, image)
+                    MediaPickerDialogExt().launchMediaPickerDialogForProfileImage(mediaPickerDialogState, scope, image)
                 }
             )
         } ?: run {
             AddImageButton(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = {
-                    launchMediaPickerDialogForProfileImage(mediaPickerDialogState, scope, image)
+                    MediaPickerDialogExt().launchMediaPickerDialogForProfileImage(mediaPickerDialogState, scope, image)
                 }
             )
         }
@@ -60,4 +61,4 @@ fun GroupInfoInput(
 }
 
 
-}
+
