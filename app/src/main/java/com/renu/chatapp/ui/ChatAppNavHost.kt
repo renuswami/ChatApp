@@ -41,10 +41,11 @@ fun MainActivity.ChatAppNavHost() {
             arguments = listOf(
                 navArgument("email") {
                     type = NavType.StringType
+                    nullable = true
                 }
             )
         ) {
-            val email = it.arguments?.getString("email")?: error("Email argument not passed")
+            val email = it.arguments?.getString("email")
             EditProfileScreen(
                 navController = navController,
                 viewModel = koinBaseViewModel(),

@@ -10,7 +10,7 @@ sealed class Screen(
     data object NewGroupChat : Screen("NewGroupChat")
 
     class EditProfile(
-        email: String
+        email: String? = null
     ) : Screen("EditProfile?email=$email"){
         companion object{
             fun format() = "EditProfile?email={email}"

@@ -39,6 +39,7 @@ import com.renu.chatapp.helper.MediaPickerDialogExt
 import com.renu.chatapp.helper.navigate
 import com.renu.chatapp.ui.Screen
 import com.renu.chatapp.ui.comp.AddImageButton
+import com.renu.chatapp.ui.comp.ImageState
 import com.streamliners.base.taskState.comp.TaskLoadingButton
 import com.streamliners.base.taskState.comp.whenError
 import com.streamliners.compose.comp.select.RadioGroup
@@ -52,7 +53,6 @@ import com.streamliners.compose.comp.textInput.state.value
 import com.streamliners.pickers.date.DatePickerDialog
 import com.streamliners.pickers.date.ShowDatePicker
 import com.streamliners.pickers.media.MediaPickerDialog
-import com.streamliners.pickers.media.PickedMedia
 import com.streamliners.pickers.media.rememberMediaPickerDialogState
 import com.streamliners.utils.DateTimeUtils
 import kotlinx.coroutines.launch
@@ -62,7 +62,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun EditProfileScreen(
     viewModel: EditProfileViewModel,
-    email: String,
+    email: String?,
     navController: NavHostController,
     showDatePicker: ShowDatePicker,
 ) {
@@ -91,8 +91,8 @@ fun EditProfileScreen(
             )
         }) { paddingValues ->
 
-        val image = remember {
-            mutableStateOf<PickedMedia?>(null)
+        val imageState = remember {
+            mutableStateOf<ImageState>(ImageState.Empty)
         }
         val nameInput = remember {
             mutableStateOf(TextInputState(label = "Name", inputConfig = InputConfig.text {
@@ -123,6 +123,30 @@ fun EditProfileScreen(
             if (gender.value != null) genderError = false
         }
 
+        // Prefill values based on current user object
+        LaunchedEffect(key1 = Unit){
+            viewModel.getCurrentUser(
+                onSuccess = {  user ->
+                    user.run {
+                        nameInput.update(name)
+                        bioInput.update(bio)
+                    }
+
+                    gender.value = user.gender
+                    dob = user.dob
+
+                    user.profileImageUrl?.let { url ->
+                        imageState.value = ImageState.Exists(url)
+                    }
+
+                    viewModel.email.value = user.email
+                },
+                onNotFount = {
+                    viewModel.email.value = email ?: error("channelId argument not passed")
+                }
+            )
+        }
+
         Column(
             Modifier
                 .fillMaxSize()
@@ -130,19 +154,19 @@ fun EditProfileScreen(
                 .padding(paddingValues)
                 .padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            image.value?.let {
+            imageState.value.data()?.let {
                 ProfileImage(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
-                    pickedMedia = it,
+                    data = it,
                     onClick = {
-                        MediaPickerDialogExt().launchMediaPickerDialogForProfileImage(mediaPickerDialogState, scope, image)
+                        MediaPickerDialogExt().launchMediaPickerDialogForImage(mediaPickerDialogState, scope, imageState)
                     }
                 )
             } ?: run {
                 AddImageButton(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     onClick = {
-                        MediaPickerDialogExt().launchMediaPickerDialogForProfileImage(mediaPickerDialogState, scope, image)
+                        MediaPickerDialogExt().launchMediaPickerDialogForImage(mediaPickerDialogState, scope, imageState)
                     }
                 )
             }
@@ -150,7 +174,7 @@ fun EditProfileScreen(
 
             TextInputLayout(state = nameInput)
             OutlinedTextField(modifier = Modifier.fillMaxSize(),
-                value = userData?.email ?: "",
+                value = viewModel.email.value,
                 onValueChange = {},
                 enabled = false,
                 label = { Text(text = "Email") })
@@ -214,7 +238,7 @@ fun EditProfileScreen(
                         gender.value?.let {
                             val user = User(
                                 name = nameInput.value(),
-                                email = email,
+                                email = viewModel.email.value,
                                 profileImageUrl = null,
                                 bio = bioInput.value(),
                                 gender = it,
@@ -223,10 +247,10 @@ fun EditProfileScreen(
                             )
                             viewModel.saveUser(
                                 user = user,
-                                image = image.value,
+                                image = imageState.value,
                                 onSuccess = {
                                     scope.launch {
-                                        snackbarHostState.showSnackbar("Registration Successful.")
+                                        snackbarHostState.showSnackbar("Saved.")
                                     }
                                     navController.navigate(
                                         Screen.Home.route,

@@ -7,17 +7,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.renu.chatapp.ui.general.AsyncImage
-import com.streamliners.pickers.media.PickedMedia
+import com.renu.chatapp.ui.comp.general.AsyncImage
 
 @Composable
 fun ProfileImage(
     modifier: Modifier,
-    pickedMedia: PickedMedia,
+    data: String,
     onClick: () -> Unit
 ){
     AsyncImage(
-       uri = pickedMedia.uri,
+       uri = data,
         modifier = modifier
             .size(100.dp)
             .clip(CircleShape)

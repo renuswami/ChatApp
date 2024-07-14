@@ -24,7 +24,7 @@ import com.renu.chatapp.R
 import com.renu.chatapp.domain.model.Gender
 import com.renu.chatapp.domain.model.User
 import com.renu.chatapp.domain.model.ext.profileImageUrl
-import com.renu.chatapp.ui.general.AsyncImage
+import com.renu.chatapp.ui.comp.general.AsyncImage
 import com.renu.chatapp.ui.theme.Neutral50
 
 @Composable

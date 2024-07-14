@@ -19,7 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.renu.chatapp.R
 import com.renu.chatapp.domain.model.Channel
-import com.renu.chatapp.ui.general.AsyncImage
+import com.renu.chatapp.ui.comp.general.AsyncImage
 import com.renu.chatapp.ui.theme.Neutral50
 
 @Composable

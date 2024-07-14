@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.renu.chatapp.domain.model.Message
-import com.renu.chatapp.ui.general.AsyncImage
+import com.renu.chatapp.ui.comp.general.AsyncImage
 import com.renu.chatapp.ui.theme.Neutral50
 
 @Composable

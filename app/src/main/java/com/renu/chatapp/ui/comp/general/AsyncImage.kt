@@ -1,4 +1,4 @@
-package com.renu.chatapp.ui.general
+package com.renu.chatapp.ui.comp.general
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size

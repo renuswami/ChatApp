@@ -1,6 +1,7 @@
 package com.renu.chatapp.feature.editProfile
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
@@ -9,12 +10,12 @@ import com.renu.chatapp.data.LocalRepo
 import com.renu.chatapp.data.UserRepo
 import com.renu.chatapp.data.remote.StorageRepo
 import com.renu.chatapp.domain.model.User
+import com.renu.chatapp.ui.comp.ImageState
 import com.streamliners.base.BaseViewModel
 import com.streamliners.base.ext.execute
 import com.streamliners.base.ext.executeOnMain
 import com.streamliners.base.taskState.load
 import com.streamliners.base.taskState.taskStateOf
-import com.streamliners.pickers.media.PickedMedia
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,13 +30,15 @@ class EditProfileViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     val saveProfileTask = taskStateOf<Unit>()
+    var currentUser: User? = null
+    var email = mutableStateOf("")
 
     private val _userState = MutableStateFlow<User?>(null)
     val userState: StateFlow<User?> = _userState.asStateFlow()
 
     fun saveUser(
         user: User,
-        image: PickedMedia?,
+        image: ImageState,
         onSuccess: () -> Unit,
     ) {
         execute(showLoadingDialog = false) {
@@ -44,24 +47,41 @@ class EditProfileViewModel @Inject constructor(
 
                 var updatedUser = user.copy(
                     profileImageUrl = uplaodProfileImage(user.email, image),
-                    fcmToken = token
+                    fcmToken = token,
+                    id = currentUser?.id
                 )
 
-                updatedUser = userRepo.saveUser(user = updatedUser)
+                updatedUser = userRepo.upsertUser(user = updatedUser)
                 localRepo.upsertCurrentUser(updatedUser)
                 executeOnMain { onSuccess() }
             }
         }
     }
 
-    private suspend fun uplaodProfileImage(email: String, image: PickedMedia?): String? {
-        return image?.let {
-            // TODO : Save image using userId
-            // TODO : Use the exact file extension
-            storageRepo.uploadFile("profileImages/$email.jpg", it.uri.toUri())
+     fun getCurrentUser(
+         onSuccess: (User) -> Unit,
+         onNotFount: () -> Unit
+     ) {
+         execute(false) {
+             localRepo.getLoggedInUserNullble()?.let { user ->
+                 currentUser = user
+                 onSuccess(user)
+             } ?: run { onNotFount }
+         }
+     }
+
+    private suspend fun uplaodProfileImage(email: String, imageState: ImageState): String? {
+        return when (imageState) {
+            ImageState.Empty -> null
+            is ImageState.Exists -> imageState.url
+            is ImageState.New -> {
+                storageRepo.uploadFile(
+                    path = "profileImages/$email.jpg",
+                    uri = imageState.pickedMedia.uri.toUri()
+                )
+            }
         }
     }
-
 
     fun loadUser() {
         viewModelScope.launch {

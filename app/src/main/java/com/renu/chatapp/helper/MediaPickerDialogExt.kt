@@ -2,6 +2,7 @@ package com.renu.chatapp.helper
 
 import androidx.compose.runtime.MutableState
 import com.mr0xf00.easycrop.AspectRatio
+import com.renu.chatapp.ui.comp.ImageState
 import com.streamliners.pickers.media.FromGalleryType
 import com.streamliners.pickers.media.MediaPickerCropParams
 import com.streamliners.pickers.media.MediaPickerDialogState
@@ -12,7 +13,32 @@ import kotlinx.coroutines.launch
 
 class MediaPickerDialogExt {
 
-    fun launchMediaPickerDialogForProfileImage(
+    fun launchMediaPickerDialogForImage(
+        mediaPickerDialogState: MutableState<MediaPickerDialogState>,
+        scope: CoroutineScope,
+        imageState: MutableState<ImageState>
+    ) {
+        mediaPickerDialogState.value = MediaPickerDialogState.ShowMediaPicker(
+            type = MediaType.Image,
+            allowMultiple = false,
+            fromGalleryType = FromGalleryType.VisualMediaPicker,
+            cropParams = MediaPickerCropParams.Enabled(
+                showAspectRatioSelectionButton = false,
+                showShapeCropButton = false,
+                lockAspectRatio = AspectRatio(1, 1)
+            )
+        ) { getList ->
+            scope.launch {
+                val list = getList()
+                list.firstOrNull()?.let { pickedMedia ->
+                    imageState.value = ImageState.New(pickedMedia)
+                }
+            }
+        }
+    }
+
+    @JvmName("launchMediaPickerDialogForImage1")
+    fun launchMediaPickerDialogForImage(
         mediaPickerDialogState: MutableState<MediaPickerDialogState>,
         scope: CoroutineScope,
         image: MutableState<PickedMedia?>
@@ -29,10 +55,11 @@ class MediaPickerDialogExt {
         ) { getList ->
             scope.launch {
                 val list = getList()
-                list.firstOrNull()?.let {
-                    image.value = it
+                list.firstOrNull()?.let { pickedMedia ->
+                    image.value = pickedMedia
                 }
             }
         }
     }
+
 }

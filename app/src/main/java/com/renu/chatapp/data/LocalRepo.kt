@@ -19,7 +19,7 @@ class LocalRepo (
         return getLoggedInUserNullble() ?: error("User not found in ;local")
     }
 
-    private suspend fun getLoggedInUserNullble(): User? {
+    suspend fun getLoggedInUserNullble(): User? {
         return dataStoreUtil.getData<User>(KEY_USER)
     }
 

@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.renu.chatapp.domain.model.ext.id
 import com.renu.chatapp.feature.home.comp.ChannelCard
-import com.renu.chatapp.helper.navigate
 import com.renu.chatapp.ui.Screen
 import com.streamliners.base.taskState.comp.whenLoaded
 import com.streamliners.compose.comp.CenterText
@@ -47,17 +46,19 @@ fun HomeScreen(
         TopAppBar(
             title = { Text(text = "ChatApp Home") }, colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primary,
+                // TODO : Avoid using hardcoded colours (Support dark theam)
                 titleContentColor = Color.White
             ),
             actions = {
                 IconButton(
                     onClick = {
-                        navController.navigate(Screen.EditProfile("renuswami2001@gmail.com"))
+                        navController.navigate(Screen.EditProfile().route)
                     }
                 ) {
                     Icon(
                         imageVector = Icons.Default.Person,
-                        contentDescription = "Profile"
+                        contentDescription = "EditProfile",
+                        tint = Color.White
                     )
                 }
             }

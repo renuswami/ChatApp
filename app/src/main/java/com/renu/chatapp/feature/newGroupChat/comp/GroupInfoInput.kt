@@ -37,16 +37,16 @@ fun GroupInfoInput(
         image.value?.let {
             ProfileImage(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                pickedMedia = it,
+                data = it.uri,
                 onClick = {
-                    MediaPickerDialogExt().launchMediaPickerDialogForProfileImage(mediaPickerDialogState, scope, image)
+                    MediaPickerDialogExt().launchMediaPickerDialogForImage(mediaPickerDialogState, scope, image)
                 }
             )
         } ?: run {
             AddImageButton(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = {
-                    MediaPickerDialogExt().launchMediaPickerDialogForProfileImage(mediaPickerDialogState, scope, image)
+                    MediaPickerDialogExt().launchMediaPickerDialogForImage(mediaPickerDialogState, scope, image)
                 }
             )
         }
