@@ -43,7 +43,7 @@ class EditProfileViewModel @Inject constructor(
     ) {
         execute(showLoadingDialog = false) {
             saveProfileTask.load {
-                val token = Firebase.messaging.token.await()
+                val token = currentUser?.fcmToken ?: Firebase.messaging.token.await()
 
                 var updatedUser = user.copy(
                     profileImageUrl = uplaodProfileImage(user.email, image),

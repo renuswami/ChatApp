@@ -45,6 +45,7 @@ fun MainActivity.ChatAppNavHost() {
                 }
             )
         ) {
+            // TODO : Improve readability bu using enum for mode (Create / Edit)
             val email = it.arguments?.getString("email")
             EditProfileScreen(
                 navController = navController,
