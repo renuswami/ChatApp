@@ -2,6 +2,8 @@ package com.renu.chatapp.domain.usecase
 
 import com.renu.chatapp.data.UserRepo
 import com.renu.chatapp.data.remote.OtherRepo
+import com.renu.chatapp.domain.model.User
+import com.renu.chatapp.domain.model.ext.id
 import com.renu.chatapp.helper.fcm.AndroidPayload
 import com.renu.chatapp.helper.fcm.FcmMessage
 import com.renu.chatapp.helper.fcm.FcmPayload
@@ -36,7 +38,7 @@ class NewMessageNotifier(
     }
 
     suspend fun notifyMultipleUserUsingTopic(
-        senderName: String,
+        sender: User,
         topic: String,
         message: String
     ) {
@@ -45,7 +47,10 @@ class NewMessageNotifier(
                 topic = topic,
                 notification = NotificationPayload(
                     title = "New Message",
-                    body = "$senderName : $message"
+                    body = "${sender.name} : $message"
+                ),
+                data = mapOf(
+                    "sendUserId" to sender.id()
                 ),
                 android = AndroidPayload(
                     priority = "high"

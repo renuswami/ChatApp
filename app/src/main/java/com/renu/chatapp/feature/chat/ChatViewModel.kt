@@ -145,7 +145,7 @@ class ChatViewModel(
         // TODO : Send to all users expact current user (silently recive)
         execute(false) {
             newMessageNotifier.notifyMultipleUserUsingTopic(
-                senderName = data.value().user.name,
+                sender = data.value().user,
                 topic = channel.id(),
                 message = message
             )

@@ -27,7 +27,21 @@ class ChatAppFCMService : FirebaseMessagingService() {
         val title = notificationParams.title ?: return
         val body = notificationParams.body ?: return
 
-        showNotification(title, body)
+        defaultExecuteHandlingError(
+            lambda = {
+                val senderUserId = message.data["senderUserId"]
+                val localuserId = localRepo.getLoggedInUser().id()
+
+                //skip showing notification if sent by self
+                if (senderUserId == localuserId){
+                    Log.i("ChatAppDebug", "Skipping showing the notification because sent by self")
+                    return@defaultExecuteHandlingError
+                }
+
+                showNotification(title, body)
+            },
+            buildType =BuildConfig.BUILD_TYPE
+        )
     }
 
     private fun logData(data: Map<String, String>) {
