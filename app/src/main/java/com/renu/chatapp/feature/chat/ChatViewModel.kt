@@ -161,7 +161,7 @@ class ChatViewModel(
             ?: error("otherUserId not found")
         execute(false) {
             newMessageNotifier.notifySingleUser(
-                senderName = data.value().user.name,
+                sender = data.value().user,
                 userId = otherUserId,
                 message = message
             )

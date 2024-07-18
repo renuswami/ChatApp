@@ -23,9 +23,8 @@ class ChatAppFCMService : FirebaseMessagingService() {
         val data = message.data
         logData(data)
 
-        val notificationParams = message.notification ?: return
-        val title = notificationParams.title ?: return
-        val body = notificationParams.body ?: return
+        val title = message.data["title"] ?: return
+        val body = message.data["body"] ?: return
 
         defaultExecuteHandlingError(
             lambda = {
